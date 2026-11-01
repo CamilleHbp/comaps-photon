@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+# Delegate to the shared runner so a local build uses the same freshness checks
+# as the completion gate. This project ships the ARM64 web debug/release pair.
+project_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+runner=/Users/camille/.codex/scripts/android_build_gate.py
+python3 "$runner" build --project "$project_root" "$@"
+python3 "$runner" verify --project "$project_root"

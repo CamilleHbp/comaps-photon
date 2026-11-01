@@ -221,3 +221,6 @@ tools/unix/maps/settings.sh
 
 # Zed
 .zed
+
+# Local Android build receipts and focused native test builds.
+/.gradle/

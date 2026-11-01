@@ -1,0 +1,60 @@
+{
+  "tasks": [
+    ":app:assembleWebDebug",
+    ":app:assembleWebRelease"
+  ],
+  "clean_tasks": [
+    ":app:clean",
+    ":sdk:clean"
+  ],
+  "gradle_args": [
+    "-Parm64",
+    "-PdisableHWAsan",
+    "-Pnjobs=6",
+    "--max-workers=4"
+  ],
+  "required_variants": {
+    "android/app": [
+      "webDebug",
+      "webRelease"
+    ]
+  },
+  "source_globs": [
+    "android/*",
+    "libs/*",
+    "3party/*",
+    "data/*",
+    "cmake/*",
+    "CMakeLists.txt",
+    "defines.hpp",
+    "omim_config.h",
+    "private.h",
+    "precompiled_headers.hpp",
+    "tools/unix/version.sh",
+    ".gitmodules",
+    "tools/skin_generator/*",
+    "tools/kothic/*",
+    "tools/python/stylesheet/*",
+    "tools/python/transit/transit_colors_export.py",
+    "tools/unix/generate*.sh",
+    "iphone/Maps/LocalizedStrings/en.lproj/LocalizableTypes.strings"
+  ],
+  "exclude_globs": [
+    "android/*/src/test/*",
+    "android/*/src/androidTest/*",
+    "libs/*/*tests*/*",
+    "data/test_data/*",
+    "android/*/src/*/play/*",
+    "3party/CMake-MetalShaderSupport/*",
+    "3party/glfw/*",
+    "3party/imgui/*",
+    "3party/libtess2/*",
+    "libs/platform/*_apple.*",
+    "libs/platform/*_ios.*",
+    "libs/platform/*_linux.*",
+    "libs/platform/*_win.*",
+    "libs/platform/*_mac.*",
+    "libs/platform/*_qt.*",
+    "libs/map/benchmark_tool/*"
+  ]
+}
