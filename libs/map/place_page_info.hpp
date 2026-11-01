@@ -91,6 +91,10 @@ struct BuildInfo
   bool m_isGeometrySelectionAllowed = false;
   bool m_needAnimationOnSelection = true;
   std::string m_postcode;
+  // Keep the original online label when the place page is rebuilt (for example
+  // after adding a bookmark). A nearby map feature may be a different place.
+  std::string m_externalTitle;
+  std::string m_externalAddress;
 };
 
 class Info : public osm::MapObject
@@ -143,6 +147,7 @@ public:
   /// UI setters
   void SetCustomName(std::string const & name);
   void SetTitlesForBookmark();
+  void SetExternalPlace(std::string const & title, std::string const & address);
   void SetTitlesForTrack(Track const & track);
   void SetCustomNames(std::string const & title, std::string const & subtitle);
   void SetCustomNameWithCoordinates(m2::PointD const & mercator, std::string const & name);

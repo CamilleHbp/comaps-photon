@@ -680,7 +680,15 @@ void Framework::FillBookmarkInfo(Bookmark const & bmk, place_page::Info & info) 
                              ? place_page::OpeningMode::Preview
                              : place_page::OpeningMode::PreviewPlus;
   info.SetOpeningMode(openingMode);
-  if (bmk.CanFillPlacePageMetadata())
+  auto const & properties = bmk.GetData().m_properties;
+  if (auto const title = properties.find("comaps:external_title"); title != properties.end())
+  {
+    // Store the provider's address with the bookmark, not just in the open page.
+    auto const address = properties.find("comaps:external_address");
+    info.SetMercator(bmk.GetPivot());
+    info.SetExternalPlace(title->second, address == properties.end() ? "" : address->second);
+  }
+  else if (bmk.CanFillPlacePageMetadata())
   {
     info.SetMercator(bmk.GetPivot());
     info.SetTitlesForBookmark();
@@ -822,7 +830,13 @@ void Framework::FillApiMarkInfo(ApiMarkPoint const & api, place_page::Info & inf
 
 void Framework::FillSearchResultInfo(SearchMarkPoint const & smp, place_page::Info & info) const
 {
-  if (smp.GetFeatureID().IsValid())
+  if (smp.GetExternalAddress())
+  {
+    // Do not snap an online match to a neighboring building or POI.
+    FillNotMatchedPlaceInfo(info, smp.GetPivot(), smp.GetMatchedName());
+    info.SetExternalPlace(smp.GetMatchedName(), *smp.GetExternalAddress());
+  }
+  else if (smp.GetFeatureID().IsValid())
     FillFeatureInfo(smp.GetFeatureID(), info);
   else
     FillPointInfo(info, smp.GetPivot(), smp.GetMatchedName());
@@ -1377,6 +1391,11 @@ void Framework::SelectSearchResult(search::Result const & result, bool animation
   info.m_source = place_page::BuildInfo::Source::Search;
   info.m_needAnimationOnSelection = false;
   int scale = -1;
+  if (result.IsExternal())
+  {
+    info.m_externalTitle = result.GetString();
+    info.m_externalAddress = result.GetAddress();
+  }
   switch (result.GetResultType())
   {
   case Result::Type::Feature:
@@ -1481,6 +1500,8 @@ void Framework::FillSearchResultsMarks(SearchResultsIterT beg, SearchResultsIter
 
     auto * mark = editSession.CreateUserMark<SearchMarkPoint>(r.GetFeatureCenter());
     mark->SetMatchedName(r.GetString());
+    if (r.IsExternal())
+      mark->SetExternalAddress(r.GetAddress());
 
     if (r.GetResultType() == search::Result::Type::Feature)
     {
@@ -2277,6 +2298,16 @@ place_page::Info Framework::BuildPlacePageInfo(place_page::BuildInfo const & bui
     GetBookmarkManager().SelectionMark().SetPtOrg(outInfo.GetMercator());
     SetPlacePageLocation(outInfo);
 
+    return outInfo;
+  }
+
+  if (!buildInfo.m_externalTitle.empty())
+  {
+    FillNotMatchedPlaceInfo(outInfo, buildInfo.m_mercator, buildInfo.m_externalTitle);
+    outInfo.SetExternalPlace(buildInfo.m_externalTitle, buildInfo.m_externalAddress);
+    outInfo.SetSelectedObject(df::SelectionShape::OBJECT_POI);
+    GetBookmarkManager().SelectionMark().SetPtOrg(outInfo.GetMercator());
+    SetPlacePageLocation(outInfo);
     return outInfo;
   }
 
@@ -3596,9 +3627,7 @@ void Framework::OnRouteFollow(routing::RouterType type)
 
   bool const isBicycleRoute = type == RouterType::Bicycle;
   if ((isPedestrianRoute || isBicycleRoute) && CurrentMapModeHasTraffic())
-  {
     m_trafficManager.SetEnabled(false /* enabled */);
-  }
   // TODO. We need to sync two enums VehicleType and RouterType to be able to pass
   // GetRoutingSettings(type).m_matchRoute to the FollowRoute() instead of |isPedestrianRoute|.
   // |isArrowGlued| parameter fully corresponds to |m_matchRoute| in RoutingSettings.

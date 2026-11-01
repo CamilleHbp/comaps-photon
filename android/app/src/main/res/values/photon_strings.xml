@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="photon_enabled">Online search with Photon</string>
+  <string name="photon_privacy">Searches send your query, IP address, and map-center location to the selected server. Turn off for offline-only search.</string>
+  <string name="photon_endpoint">Photon server</string>
+  <string name="photon_endpoint_hint">HTTPS base URL of the Photon server. The public Komoot demo is intended for light testing.</string>
+  <string name="photon_endpoint_invalid">Enter an HTTPS server URL without credentials, a query, or a fragment.</string>
+  <string name="photon_online">Online · Photon</string>
+  <string name="photon_offline">Offline · CoMaps</string>
+  <string name="photon_loading">Searching online…</string>
+  <string name="photon_empty">No online matches. Offline results are shown below.</string>
+  <string name="photon_unavailable">Online search unavailable. Offline search is still available.</string>
+  <string name="photon_throttled">Online server is busy. Please try again later.</string>
+  <string name="photon_search_disclosure">Online queries and map-center location are sent to %1$s. Offline-only search is available in Settings → Privacy.</string>
+</resources>

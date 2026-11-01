@@ -8,6 +8,10 @@ import androidx.annotation.NonNull;
  */
 public interface SearchListener
 {
+  // Other search surfaces can ignore online status and remain offline-only.
+  @Keep
+  default void onPhotonStatus(int status, long timestamp)
+  {}
   /**
    * @param results   Search results.
    * @param timestamp Timestamp of search request.

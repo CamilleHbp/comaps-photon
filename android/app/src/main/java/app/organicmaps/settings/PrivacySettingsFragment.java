@@ -28,6 +28,7 @@ public class PrivacySettingsFragment extends BaseXmlSettingsFragment
     super.onViewCreated(view, savedInstanceState);
     initPlayServicesPrefsCallbacks();
     initSearchPrivacyPrefsCallbacks();
+    initPhotonPreferences();
   }
 
   private void initPlayServicesPrefsCallbacks()
@@ -66,6 +67,36 @@ public class PrivacySettingsFragment extends BaseXmlSettingsFragment
         }
       });
     }
+  }
+
+  private void initPhotonPreferences()
+  {
+    TwoStatePreference enabled = findPreference("photon_enabled");
+    enabled.setChecked(Config.isPhotonEnabled());
+    enabled.setOnPreferenceChangeListener((preference, value) -> {
+      Config.setPhotonEnabled((Boolean) value);
+      return true;
+    });
+    androidx.preference.EditTextPreference endpoint = findPreference("photon_endpoint");
+    endpoint.setText(Config.getPhotonEndpoint());
+    endpoint.setSummary(Config.getPhotonEndpoint());
+    endpoint.setOnPreferenceChangeListener((preference, value) -> {
+      String text = value.toString().trim();
+      android.net.Uri uri = android.net.Uri.parse(text);
+      // Queries and credentials belong to the request, not the configured server.
+      if (!"https".equals(uri.getScheme()) || android.text.TextUtils.isEmpty(uri.getHost())
+          || uri.getUserInfo() != null || uri.getQuery() != null || uri.getFragment() != null
+          || text.matches(".*\\s.*"))
+      {
+        android.widget.Toast
+            .makeText(requireContext(), R.string.photon_endpoint_invalid, android.widget.Toast.LENGTH_LONG)
+            .show();
+        return false;
+      }
+      Config.setPhotonEndpoint(text);
+      endpoint.setSummary(text);
+      return true;
+    });
   }
 
   private void initSearchPrivacyPrefsCallbacks()

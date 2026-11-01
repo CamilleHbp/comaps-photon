@@ -248,6 +248,17 @@ void Info::SetCustomName(std::string const & name)
   m_customName = name;
 }
 
+void Info::SetExternalPlace(std::string const & title, std::string const & address)
+{
+  SetCustomName(title);
+  m_address = address;
+  m_uiAddress = address;
+  m_buildInfo.m_externalTitle = title;
+  m_buildInfo.m_externalAddress = address;
+  // External coordinates do not establish which local OSM feature can be edited.
+  m_canEditOrAdd = false;
+}
+
 void Info::SetTitlesForTrack(Track const & track)
 {
   m_uiTitle = track.GetName();

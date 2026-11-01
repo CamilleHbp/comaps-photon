@@ -63,6 +63,11 @@ public class SearchResult
     }
   }
 
+  // JNI assigns these only for the combined phone/tablet search. A handle stays
+  // tied to its place when online results arrive and shift the visible rows.
+  public boolean isOnline;
+  public long nativeHandle;
+
   public final String name;
   public final String suggestion;
   public final double lat;

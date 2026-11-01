@@ -2,6 +2,20 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
+  <!-- Keep the data disclosure next to the switch that controls online requests. -->
+  <SwitchPreferenceCompat
+    android:key="photon_enabled"
+    android:title="@string/photon_enabled"
+    android:summary="@string/photon_privacy"
+    android:defaultValue="true"
+    android:widgetLayout="@layout/preference_switch"
+    app:singleLineTitle="false" />
+  <EditTextPreference
+    android:key="photon_endpoint"
+    android:title="@string/photon_endpoint"
+    android:dialogMessage="@string/photon_endpoint_hint"
+    app:singleLineTitle="false" />
+
   <SwitchPreferenceCompat
     android:defaultValue="true"
     android:key="@string/pref_search_history"

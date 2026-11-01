@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Keep the same privacy information visible when the app is used in French. -->
+  <string name="photon_enabled">Recherche en ligne avec Photon</string>
+  <string name="photon_privacy">Les recherches transmettent votre requête, votre adresse IP et la position du centre de la carte au serveur sélectionné. Désactivez cette option pour rechercher uniquement hors ligne.</string>
+  <string name="photon_endpoint">Serveur Photon</string>
+  <string name="photon_endpoint_hint">Adresse HTTPS de base du serveur Photon. Le serveur de démonstration public de Komoot est destiné à des essais limités.</string>
+  <string name="photon_endpoint_invalid">Saisissez une adresse de serveur HTTPS sans identifiants, paramètres de requête ni fragment.</string>
+  <string name="photon_online">En ligne · Photon</string>
+  <string name="photon_offline">Hors ligne · CoMaps</string>
+  <string name="photon_loading">Recherche en ligne…</string>
+  <string name="photon_empty">Aucun résultat en ligne. Les résultats hors ligne sont affichés ci-dessous.</string>
+  <string name="photon_unavailable">Recherche en ligne indisponible. La recherche hors ligne reste disponible.</string>
+  <string name="photon_throttled">Le serveur est occupé. Veuillez réessayer plus tard.</string>
+  <string name="photon_search_disclosure">Les requêtes et la position du centre de la carte sont envoyées à %1$s. La recherche uniquement hors ligne est disponible dans Paramètres → Confidentialité.</string>
+</resources>

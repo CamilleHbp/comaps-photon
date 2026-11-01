@@ -453,6 +453,24 @@ public final class Config
     mPrefs.edit().putBoolean(KEY_MISC_FIRST_START_DIALOG_SEEN, true).apply();
   }
 
+  // This fork uses Photon first, but an offline-only choice must survive restarts.
+  public static boolean isPhotonEnabled()
+  {
+    return getBool("PhotonEnabled", true);
+  }
+  public static void setPhotonEnabled(boolean enabled)
+  {
+    setBool("PhotonEnabled", enabled);
+  }
+  public static String getPhotonEndpoint()
+  {
+    return getString("PhotonEndpoint", "https://photon.komoot.io");
+  }
+  public static void setPhotonEndpoint(String endpoint)
+  {
+    setString("PhotonEndpoint", endpoint);
+  }
+
   public static boolean isSearchHistoryEnabled()
   {
     return getBool(KEY_PREF_SEARCH_HISTORY, true);

@@ -169,6 +169,8 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
   private final LastPosition mLastPosition = new LastPosition();
   private boolean mSearchRunning;
+  private boolean mUsePhoton;
+  private boolean mResumeSearch;
   private String mInitialQuery;
   @Nullable
   private String mInitialLocale;
@@ -179,14 +181,12 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
                                 activityResult -> mToolbarController.onVoiceRecognitionResult(activityResult));
 
   private final ActivityResultLauncher<Intent> mContactPickerLauncher =
-          registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-          result -> {
-            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null)
-            {
-              mToolbarController.setQuery(Utils.getContactAddress(requireContext(), result.getData().getData()));
-            }
-          }
-  );
+      registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null)
+        {
+          mToolbarController.setQuery(Utils.getContactAddress(requireContext(), result.getData().getData()));
+        }
+      });
 
   private final LocationListener mLocationListener = new LocationListener() {
     @Override
@@ -237,6 +237,8 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
     UiUtils.showIf(hasQuery, mResultsFrame);
     UiUtils.showIf(hasQuery, mShowOnMapFab);
+    // Wait for the complete snapshot so late results cannot silently replace its pins.
+    mShowOnMapFab.setEnabled(!mUsePhoton || (!mSearchRunning && mSearchAdapter.getResultCount() > 0));
 
     if (hasQuery)
       mTabFrame.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
@@ -253,7 +255,8 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
   private void updateResultsPlaceholder()
   {
-    final boolean show = !mSearchRunning && mSearchAdapter.getItemCount() == 0 && mToolbarController.hasQuery();
+    final boolean show =
+        !mSearchRunning && mSearchAdapter.getResultCount() == 0 && !mUsePhoton && mToolbarController.hasQuery();
 
     UiUtils.showIf(show, mResultsPlaceholder);
   }
@@ -305,21 +308,28 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
     mShowOnMapFab.setOnClickListener(v -> showAllResultsOnMap());
     mOpenContactPicker = root.findViewById(R.id.open_contact_picker);
     mOpenContactPicker.setOnClickListener(v -> {
-      if (Utils.openContactPicker().resolveActivity(getContext().getPackageManager()) != null) {
+      if (Utils.openContactPicker().resolveActivity(getContext().getPackageManager()) != null)
+      {
         mContactPickerLauncher.launch(Utils.openContactPicker());
       }
-      else {
-        Logger.i("mOpenContactPicker", "No compatible contacts app (needs to support postal-address_v2) installed, hiding contacts picker...");
+      else
+      {
+        Logger.i(
+            "mOpenContactPicker",
+            "No compatible contacts app (needs to support postal-address_v2) installed, hiding contacts picker...");
         mOpenContactPicker.hide();
       }
     });
 
-    if (Utils.openContactPicker().resolveActivity(getContext().getPackageManager()) == null) {
-      Logger.i("mOpenContactPicker", "No compatible contacts app (needs to support postal-address_v2) installed, hiding contacts picker...");
+    if (Utils.openContactPicker().resolveActivity(getContext().getPackageManager()) == null)
+    {
+      Logger.i("mOpenContactPicker",
+               "No compatible contacts app (needs to support postal-address_v2) installed, hiding contacts picker...");
       compatibleContactsAppInstalled = false;
     }
 
-    ViewCompat.setOnApplyWindowInsetsListener(mResultsPlaceholder, new WindowInsetUtils.ScrollableContentInsetsListener(mResultsPlaceholder, mOpenContactPicker));
+    ViewCompat.setOnApplyWindowInsetsListener(mResultsPlaceholder, new WindowInsetUtils.ScrollableContentInsetsListener(
+                                                                       mResultsPlaceholder, mOpenContactPicker));
 
     mResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
     mResults.setAdapter(mSearchAdapter);
@@ -332,11 +342,9 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
     mToolbarController.activate();
 
     SearchEngine.INSTANCE.addListener(this);
+    SearchEngine.INSTANCE.addHandheldListener(this);
 
     tabAdapter.setTabSelectedListener(tab -> mToolbarController.deactivate());
-
-    if (mInitialSearchOnMap)
-      showAllResultsOnMap();
   }
 
   @Override
@@ -355,11 +363,22 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
       setQuery(mInitialQuery, false);
       mInitialQuery = null;
     }
+    else if (mResumeSearch && mToolbarController.hasQuery())
+      runSearch();
+    mResumeSearch = false;
   }
 
   @Override
   public void onPause()
   {
+    mResumeSearch = mToolbarController.hasQuery();
+    if (mUsePhoton)
+    {
+      // Keep selected map pins, but stop requests from a hidden screen.
+      long timestamp = mLastQueryTimestamp;
+      mLastQueryTimestamp = 0;
+      SearchEngine.INSTANCE.endHandheldSession(timestamp);
+    }
     MwmApplication.from(requireContext()).getLocationHelper().removeListener(mLocationListener);
     super.onPause();
   }
@@ -379,6 +398,9 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
     mAttachedRecyclers.clear();
     SearchEngine.INSTANCE.removeListener(this);
+    SearchEngine.INSTANCE.removeHandheldListener(this);
+    if (mUsePhoton)
+      SearchEngine.INSTANCE.endHandheldSession(mLastQueryTimestamp);
     super.onDestroy();
   }
 
@@ -440,7 +462,9 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
     if (RoutingController.get().isWaitingPoiPick())
     {
-      final String subtitle = (result.description != null) ? result.description.localizedFeatureType : "";
+      final String subtitle = result.description == null ? ""
+                                                         : (result.isOnline ? result.description.region
+                                                                            : result.description.localizedFeatureType);
       final String title = TextUtils.isEmpty(result.name) ? subtitle : result.name;
 
       final MapObject point =
@@ -449,7 +473,10 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
     }
     else
     {
-      SearchEngine.INSTANCE.showResult(resultIndex);
+      if (result.nativeHandle != 0)
+        SearchEngine.INSTANCE.showHandheldResult(result.nativeHandle);
+      else
+        SearchEngine.INSTANCE.showResult(resultIndex);
     }
 
     mToolbarController.deactivate();
@@ -460,6 +487,20 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
   void showAllResultsOnMap()
   {
+    if (mUsePhoton)
+    {
+      if (mSearchRunning || mSearchAdapter.getResultCount() == 0)
+        return;
+      String query = getQuery();
+      if (Config.isSearchHistoryEnabled())
+        SearchRecents.add(query, requireContext());
+      SearchEngine.INSTANCE.showHandheldResults(mSearchAdapter.getResultHandles());
+      SearchEngine.INSTANCE.setQuery(query);
+      mToolbarController.deactivate();
+      if (requireActivity() instanceof SearchActivity)
+        Utils.navigateToParent(requireActivity());
+      return;
+    }
     SearchEngine.INSTANCE.updateViewportWithLastResults();
 
     // The previous search should be cancelled before the new one is started, since previous search
@@ -496,6 +537,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
   private void stopSearch()
   {
+    mLastQueryTimestamp = 0;
     SearchEngine.INSTANCE.cancel();
     updateSearchView();
   }
@@ -510,10 +552,27 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
   {
     // The previous search should be cancelled before the new one is started, since previous search
     // results are no longer needed.
+    // Cancellation can call back synchronously; invalidate that query first.
+    mLastQueryTimestamp = 0;
     SearchEngine.INSTANCE.cancel();
 
     mLastQueryTimestamp = System.nanoTime();
-    if (isTabletSearch())
+    mUsePhoton = Config.isPhotonEnabled() && !isCategory();
+    mSearchRunning = true;
+    mSearchAdapter.setGrouped(mUsePhoton);
+    mSearchAdapter.setOnlineStatus(SearchEngine.PHOTON_LOADING);
+    // A cached or unavailable search can finish before the native call returns.
+    mToolbarController.showProgress(true);
+    updateFrames();
+    if (mUsePhoton)
+    {
+      String locale =
+          !TextUtils.isEmpty(mInitialLocale) ? mInitialLocale : Language.getKeyboardLocale(requireContext());
+      SearchEngine.INSTANCE.searchHandheld(getQuery(), locale, mLastQueryTimestamp, isTabletSearch(),
+                                           mLastPosition.valid, mLastPosition.lat, mLastPosition.lon,
+                                           Config.getPhotonEndpoint());
+    }
+    else if (isTabletSearch())
     {
       SearchEngine.INSTANCE.searchInteractive(requireContext(), getQuery(), isCategory(), mLastQueryTimestamp,
                                               true /* isMapAndTable */);
@@ -523,20 +582,17 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
       if (!SearchEngine.INSTANCE.search(requireContext(), getQuery(), isCategory(), mLastQueryTimestamp,
                                         mLastPosition.valid, mLastPosition.lat, mLastPosition.lon))
       {
+        updateSearchView();
         return;
       }
     }
-
-    mSearchRunning = true;
-    mToolbarController.showProgress(true);
-
-    updateFrames();
   }
 
   @Override
   public void onResultsUpdate(@NonNull SearchResult[] results, long timestamp)
   {
-    if (!isAdded() || !mToolbarController.hasQuery())
+    // Java delivery may be queued after native delivery, so check the query again.
+    if (!isAdded() || !mToolbarController.hasQuery() || timestamp != mLastQueryTimestamp)
       return;
 
     refreshSearchResults(results);
@@ -545,7 +601,23 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
   @Override
   public void onResultsEnd(long timestamp)
   {
-    onSearchEnd();
+    if (timestamp == mLastQueryTimestamp)
+    {
+      onSearchEnd();
+      if (mInitialSearchOnMap && isAdded())
+      {
+        // A map-search intent must wait for the same completed snapshot as the list.
+        mInitialSearchOnMap = false;
+        showAllResultsOnMap();
+      }
+    }
+  }
+
+  @Override
+  public void onPhotonStatus(int status, long timestamp)
+  {
+    if (isAdded() && timestamp == mLastQueryTimestamp)
+      mSearchAdapter.setOnlineStatus(status);
   }
 
   @Override

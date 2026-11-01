@@ -52,6 +52,10 @@ public:
   std::string const & GetMatchedName() const { return m_matchedName; }
   void SetMatchedName(std::string const & name);
 
+  // Search markers need the same address as the list, even without a local feature.
+  void SetExternalAddress(std::string address) { m_externalAddress = std::move(address); }
+  std::optional<std::string> const & GetExternalAddress() const { return m_externalAddress; }
+
   void SetFromType(uint32_t type);
   void SetNotFoundType();
 
@@ -83,6 +87,7 @@ protected:
 
   // Used to pass exact search result matched string into a place page.
   std::string m_matchedName;
+  std::optional<std::string> m_externalAddress;
   std::string m_reason;
 
   FeatureID m_featureID;

@@ -15,6 +15,83 @@ public enum SearchEngine implements SearchListener, MapSearchListener,
 {
   INSTANCE;
 
+  public static final int PHOTON_READY = 0;
+  public static final int PHOTON_LOADING = 1;
+  public static final int PHOTON_EMPTY = 2;
+  public static final int PHOTON_UNAVAILABLE = 3;
+  public static final int PHOTON_THROTTLED = 4;
+
+  @Override
+  @androidx.annotation.Keep
+  public void onPhotonStatus(int status, long timestamp)
+  {
+    UiThread.run(() -> {
+      for (SearchListener listener : mHandheldListeners)
+        listener.onPhotonStatus(status, timestamp);
+    });
+  }
+
+  // Keep online snapshots off the ordinary listener channel: Android Auto still
+  // selects from its own offline result cache and must never receive these rows.
+  @androidx.annotation.Keep
+  public void onHandheldResultsUpdate(SearchResult[] results, long timestamp)
+  {
+    UiThread.run(() -> {
+      for (SearchListener listener : mHandheldListeners)
+        listener.onResultsUpdate(results, timestamp);
+    });
+  }
+
+  @androidx.annotation.Keep
+  public void onHandheldResultsEnd(long timestamp)
+  {
+    UiThread.run(() -> {
+      for (SearchListener listener : mHandheldListeners)
+        listener.onResultsEnd(timestamp);
+    });
+  }
+
+  private final ObserverList<SearchListener> mHandheldListeners = new ObserverList<>();
+
+  public void addHandheldListener(SearchListener listener)
+  {
+    mHandheldListeners.addObserver(listener);
+  }
+  public void removeHandheldListener(SearchListener listener)
+  {
+    mHandheldListeners.removeObserver(listener);
+  }
+
+  // Only the handheld search screen opts in; car search keeps its existing API.
+  @MainThread
+  public void searchHandheld(String query, String language, long timestamp, boolean showOnMap, boolean hasLocation,
+                             double lat, double lon, String endpoint)
+  {
+    nativeRunHandheldSearch(query, language, timestamp, showOnMap, hasLocation, lat, lon, endpoint);
+  }
+
+  public void showHandheldResult(long handle)
+  {
+    mQuery = "";
+    nativeShowHandheldResult(handle);
+  }
+
+  public void showHandheldResults(long[] handles)
+  {
+    nativeShowHandheldResults(handles);
+  }
+
+  public void endHandheldSession(long timestamp)
+  {
+    nativeEndHandheldSession(timestamp);
+  }
+
+  private static native void nativeRunHandheldSearch(String query, String language, long timestamp, boolean showOnMap,
+                                                     boolean hasLocation, double lat, double lon, String endpoint);
+  private static native void nativeShowHandheldResult(long handle);
+  private static native void nativeShowHandheldResults(long[] handles);
+  private static native void nativeEndHandheldSession(long timestamp);
+
   public static final long ALL_BOOKMARK_CATEGORIES = -1L;
 
   // Query, which results are shown on the map.

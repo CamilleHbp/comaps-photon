@@ -25,6 +25,70 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
   private final SearchFragment mSearchFragment;
   @Nullable
   private SearchResult[] mResults;
+  private SearchRows mRows = new SearchRows(false, new boolean[0]);
+  private boolean mGrouped;
+  private int mOnlineStatus = app.organicmaps.sdk.search.SearchEngine.PHOTON_LOADING;
+  private static final int TYPE_HEADER = 3;
+
+  private class HeaderViewHolder extends SearchDataViewHolder
+  {
+    HeaderViewHolder(View view)
+    {
+      super(view);
+    }
+
+    @Override
+    void bind(SearchResult unused, int section)
+    {
+      String text = mSearchFragment.getString(section == SearchRows.ONLINE_HEADER ? R.string.photon_online
+                                                                                  : R.string.photon_offline);
+      if (section == SearchRows.ONLINE_HEADER)
+      {
+        int statusText = switch (mOnlineStatus)
+        {
+          case app.organicmaps.sdk.search.SearchEngine.PHOTON_LOADING -> R.string.photon_loading;
+          case app.organicmaps.sdk.search.SearchEngine.PHOTON_EMPTY -> R.string.photon_empty;
+          case app.organicmaps.sdk.search.SearchEngine.PHOTON_UNAVAILABLE -> R.string.photon_unavailable;
+          case app.organicmaps.sdk.search.SearchEngine.PHOTON_THROTTLED -> R.string.photon_throttled;
+          default -> 0;
+        };
+        if (statusText != 0)
+          text += "\n" + mSearchFragment.getString(statusText);
+        text += "\n"
+              + mSearchFragment.getString(R.string.photon_search_disclosure,
+                                          app.organicmaps.sdk.util.Config.getPhotonEndpoint());
+      }
+      ((MaterialTextView) itemView).setText(text);
+    }
+  }
+
+  void setOnlineStatus(int status)
+  {
+    mOnlineStatus = status;
+    if (mGrouped)
+      notifyItemChanged(0);
+  }
+
+  void setGrouped(boolean grouped)
+  {
+    mGrouped = grouped;
+    refreshData(null);
+  }
+
+  int getResultCount()
+  {
+    return mResults == null ? 0 : mResults.length;
+  }
+
+  long[] getResultHandles()
+  {
+    if (mResults == null)
+      return new long[0];
+    long[] handles = new long[mResults.length];
+    for (int i = 0; i < handles.length; ++i)
+      handles[i] = mResults[i].nativeHandle;
+    return handles;
+  }
 
   static abstract class SearchDataViewHolder extends RecyclerView.ViewHolder
   {
@@ -210,6 +274,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
 
     return switch (viewType)
     {
+      case TYPE_HEADER -> new HeaderViewHolder(inflater.inflate(R.layout.item_search_section, parent, false));
       case SearchResult.TYPE_SUGGEST, SearchResult.TYPE_PURE_SUGGEST ->
         new SuggestViewHolder(inflater.inflate(R.layout.item_search_suggest, parent, false));
       case SearchResult.TYPE_RESULT ->
@@ -221,13 +286,15 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
   @Override
   public void onBindViewHolder(@NonNull SearchDataViewHolder holder, int position)
   {
-    holder.bind(mResults[position], position);
+    int resultIndex = mRows.resultIndex(position);
+    holder.bind(resultIndex < 0 ? null : mResults[resultIndex], resultIndex);
   }
 
   @Override
   public int getItemViewType(int position)
   {
-    return mResults[position].type;
+    int resultIndex = mRows.resultIndex(position);
+    return resultIndex < 0 ? TYPE_HEADER : mResults[resultIndex].type;
   }
 
   @Override
@@ -239,12 +306,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
   @Override
   public int getItemCount()
   {
-    int res = 0;
-    if (mResults == null)
-      return res;
-
-    res += mResults.length;
-    return res;
+    return mRows.size();
   }
 
   public void clear()
@@ -255,6 +317,10 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
   void refreshData(@Nullable SearchResult[] results)
   {
     mResults = results;
+    boolean[] online = new boolean[getResultCount()];
+    for (int i = 0; i < online.length; ++i)
+      online[i] = results[i].isOnline;
+    mRows = new SearchRows(mGrouped, online);
     notifyDataSetChanged();
   }
 }

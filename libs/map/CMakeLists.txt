@@ -39,6 +39,10 @@ set(SRC
   isolines_manager.hpp
   mwm_url.cpp
   mwm_url.hpp
+  photon_api.cpp
+  photon_api.hpp
+  photon_http.cpp
+  photon_search_state.hpp
   place_page_info.cpp
   place_page_info.hpp
   position_provider.hpp

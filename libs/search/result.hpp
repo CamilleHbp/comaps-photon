@@ -62,6 +62,12 @@ public:
   Result(m2::PointD const & pt, std::string const & name) : m_center(pt), m_str(name) {}
   void FromFeature(FeatureID const & id, uint32_t mainType, uint32_t matchedType, Details const & details);
 
+  // Online matches have coordinates, but no ID in a downloaded map. Keep the
+  // provider separate so callers never mistake an OSM ID for a local feature.
+  void SetExternalSource(std::string source) { m_externalSource = std::move(source); }
+  std::string const & GetExternalSource() const { return m_externalSource; }
+  bool IsExternal() const { return !m_externalSource.empty(); }
+
   void SetAddress(std::string && address) { m_address = std::move(address); }
   void SetBranch(std::string && branch) { m_branch = std::move(branch); }
   void SetType(Result::Type type) { m_resultType = type; }
@@ -156,6 +162,7 @@ private:
   std::string m_str;
   std::string m_address;
   std::string m_branch;
+  std::string m_externalSource;
   uint32_t m_mainType = 0;
   uint32_t m_matchedType = 0;
   std::string m_suggestionStr;
