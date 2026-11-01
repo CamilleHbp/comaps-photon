@@ -1,0 +1,33 @@
+# CoMaps-Photon web
+
+An installable web companion to the native CoMaps fork. Provides an OpenStreetMap map, explicit-submit Photon searches, local saved places, shareable coordinates, geolocation, driving-route previews, and CoMaps deep links. English and French follow browser preferences, with a persistent language override in Settings.
+
+Saved places and the app shell work offline. This is not a WebAssembly port of the native CoMaps engine: offline map downloads, offline search, and turn-by-turn navigation remain native-app features. Saved places are local to each origin and are not shared between domains.
+
+## Development
+
+Node.js 22.12 or newer is required.
+
+```sh
+npm ci
+npm run dev
+npm run build
+npm test
+```
+
+Production output is `dist/`. The build generates a content-versioned service worker that precaches local assets only. External tiles use ordinary HTTP caching; there is no tile prefetch, bulk download, or persistent offline tile cache. Service worker updates activate after existing app windows close.
+
+## Hosting
+
+Serve `dist/` over HTTPS at both `maps.camille.studio` and `comaps.camille.studio`. Both names need an A record for the homeserver (`195.15.214.30`). The supplied `deploy/compose.yaml` runs a static, unprivileged Nginx container on the existing `homeserver-web` network. Place its `dist/`, `nginx.conf`, and compose file together under `/srv/homeserver/apps/comaps-photon-web/`. Append `deploy/Caddyfile` to the homeserver's Caddy configuration, validate it, and restart only the Caddy proxy with `docker compose restart caddy` (its admin API is disabled and this binary does not implement SIGUSR1 reloads).
+
+Do not replace the homeserver Caddyfile or restart unrelated application services. Serve HTML, the manifest, and `sw.js` with revalidation; hashed assets may be immutable. Unknown asset paths must return 404.
+
+## Data services and credits
+
+- Map data and tiles: [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), under the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
+- Geocoding: [Photon](https://github.com/komoot/photon), using the public Komoot demo for moderate personal use. Search is submitted explicitly rather than on every keystroke. The public service has no availability guarantee; use a dedicated instance for heavier traffic.
+- Driving route previews: [OSRM public routing service](https://project-osrm.org/). Routes are previews, not navigation instructions.
+- Mapping library: [Leaflet](https://leafletjs.com/), BSD-2-Clause. Icons: [Lucide](https://lucide.dev/), ISC. The CoMaps mark is reused from this repository's `docs/badges/logo.svg`.
+
+The browser sends search text and map centre to Photon, and route endpoints to OSRM. Tile requests disclose the viewed area to OpenStreetMap. Settings explains these requests. No analytics or server-side user database is included.
