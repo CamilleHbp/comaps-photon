@@ -45,7 +45,10 @@ public class HelpFragment extends BaseMwmFragment implements View.OnClickListene
     mDonateUrl = Utils.getDonateUrl(requireContext());
     View root = inflater.inflate(R.layout.about, container, false);
 
-    ((MaterialTextView) root.findViewById(R.id.version)).setText(BuildConfig.VERSION_NAME);
+    ((MaterialTextView) root.findViewById(R.id.version)).setText(
+        getString(R.string.app_installed_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+    root.findViewById(R.id.app_check_updates).setOnClickListener(
+        view -> studio.camille.updater.CamilleUpdater.checkNow(requireActivity()));
 
     final boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 

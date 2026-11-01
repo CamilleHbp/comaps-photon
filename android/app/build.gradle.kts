@@ -85,6 +85,7 @@ android {
     compileSdk = providers.gradleProperty("propCompileSdkVersion").get().toInt()
 
     defaultConfig {
+        resValue("string", "camille_update_app_id", "comaps-photon")
         versionCode = rootProject.ext.get("versionCode") as Int
         versionName = rootProject.ext.get("versionName") as String
         applicationId = appId
@@ -357,6 +358,7 @@ androidComponents {
 }
 
 dependencies {
+    implementation(files("libs/camille-updater-1.0.4.aar"))
     implementation(project(":sdk"))
     coreLibraryDesugaring(libs.android.tools.desugar)
 
