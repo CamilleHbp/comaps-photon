@@ -1,6 +1,7 @@
 package app.organicmaps.maplayer;
 
 import android.content.Context;
+import app.organicmaps.bookmarks.BookmarkCategoriesActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,13 @@ public class ToggleMapLayerFragment extends Fragment
     mCloseButton.setOnClickListener(view -> closeLayerBottomSheet());
 
     initRecycler(mRoot);
-    return mRoot;
+    ((android.widget.LinearLayout) mRoot).addView(new SavedPlacesLayersView(requireContext(),
+        () -> { BookmarkCategoriesActivity.start(requireActivity()); closeLayerBottomSheet(); },
+        this::closeLayerBottomSheet,
+        () -> { app.organicmaps.bookmarks.OsmAndImportActivity.start(requireActivity()); closeLayerBottomSheet(); }));
+    androidx.core.widget.NestedScrollView scroll = new androidx.core.widget.NestedScrollView(requireContext());
+    scroll.addView(mRoot);
+    return scroll;
   }
 
   private void initRecycler(@NonNull View root)

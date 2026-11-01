@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="saved_layers_title">Lieux enregistrés</string>
+  <string name="saved_layers_show_all">Afficher toutes les listes</string>
+  <string name="saved_layers_hide_all">Masquer toutes les listes</string>
+  <string name="saved_layers_search">Rechercher une liste</string>
+  <string name="saved_layers_manage">Gérer les listes</string>
+  <string name="saved_layers_count">%1$s · %2$d lieux · %3$d traces</string>
+  <string name="saved_layers_only">Afficher uniquement</string>
+  <string name="saved_layers_zoom">Voir sur la carte</string>
+  <plurals name="saved_layers_places"><item quantity="one">%d lieu</item><item quantity="other">%d lieux</item></plurals>
+  <plurals name="saved_layers_tracks"><item quantity="one">%d trace</item><item quantity="other">%d traces</item></plurals>
+</resources>

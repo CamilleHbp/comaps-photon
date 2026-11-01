@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="saved_layers_title">Saved places</string>
+  <string name="saved_layers_show_all">Show all lists</string>
+  <string name="saved_layers_hide_all">Hide all lists</string>
+  <string name="saved_layers_search">Search lists</string>
+  <string name="saved_layers_manage">Manage lists</string>
+  <string name="saved_layers_count">%1$s · %2$d places · %3$d tracks</string>
+  <string name="saved_layers_only">Show only</string>
+  <string name="saved_layers_zoom">Zoom to list</string>
+  <plurals name="saved_layers_places"><item quantity="one">%d place</item><item quantity="other">%d places</item></plurals>
+  <plurals name="saved_layers_tracks"><item quantity="one">%d track</item><item quantity="other">%d tracks</item></plurals>
+</resources>

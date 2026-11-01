@@ -1208,6 +1208,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
   protected void onResumeFragments()
   {
     super.onResumeFragments();
+    if (getIntent().getBooleanExtra("show_saved_layers", false))
+    {
+      getIntent().removeExtra("show_saved_layers");
+      showBottomSheet(LAYERS_MENU_ID);
+    }
     RoutingController.get().restore();
   }
 

@@ -82,6 +82,13 @@ public class MenuBottomSheetFragment extends BottomSheetDialogFragment
     // We fix this by forcing the expanded state and disabling the collapsed one
     behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     behavior.setSkipCollapsed(true);
+    if (getArguments() != null && "LAYERS_MENU_BOTTOM_SHEET".equals(getArguments().getString("id")))
+    {
+      int screenHeight = getResources().getDisplayMetrics().heightPixels;
+      behavior.setMaxHeight((int) (screenHeight * 0.8f));
+      behavior.setPeekHeight((int) (screenHeight * 0.55f));
+      behavior.setSkipCollapsed(false);
+    }
   }
 
   @Override
