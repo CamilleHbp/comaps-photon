@@ -57,10 +57,7 @@ public class Factory
       if (uris == null)
         return false;
 
-      MwmApplication app = MwmApplication.from(activity);
-      final File tempDir = new File(StorageUtils.getTempPath(app));
-      final ContentResolver resolver = activity.getContentResolver();
-      ThreadPool.getStorage().execute(() -> BookmarkManager.INSTANCE.importBookmarksFiles(resolver, uris, tempDir));
+      app.organicmaps.bookmarks.OsmAndImportActivity.routeShared(activity, uris);
       return false;
     }
   }

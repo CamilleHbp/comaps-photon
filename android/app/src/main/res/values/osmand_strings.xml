@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="osmand_import_title">Import from OsmAnd</string>
+  <string name="osmand_import_ungrouped">Imported places</string>
+  <string name="osmand_import_help">Choose OsmAnd favorites (.gpx) or a favorites backup (.gpx.zip). You can select several files. Export or share from OsmAnd, or copy your backup to Documents first: Android hides other apps’ Android/data folders. Your original files stay unchanged.</string>
+  <string name="osmand_import_choose">Choose files</string>
+  <string name="osmand_import_error">Could not read this backup. Check that it is a valid GPX or GPX ZIP file under 32 MiB, then try again.</string>
+  <string name="osmand_import_not_osmand">This file is not an OsmAnd favorites export. Use the standard Favorites import for other GPX, KML or KMZ files.</string>
+  <string name="osmand_import_empty">No valid saved places found.</string>
+  <string name="osmand_import_working">Preparing or saving your places…</string>
+  <string name="osmand_import_preview">Choose lists to import. Existing places will be skipped and your CoMaps edits kept. Invalid places skipped: %1$d.</string>
+  <string name="osmand_import_group">%1$s\n%2$d places · %3$d already included</string>
+  <string name="osmand_import_selected">Import selected lists</string>
+  <string name="osmand_import_result">%1$d places saved. %2$d duplicates skipped. %3$d invalid places skipped.</string>
+  <string name="osmand_import_failures">Could not save: %1$s. Free some storage and retry; saved places will not be duplicated.</string>
+  <string name="osmand_import_retry">Retry</string>
+  <string name="osmand_import_view_layers">View layers</string>
+  <string name="osmand_import_done">Done</string>
+  <string name="saved_layers_actions">Actions for %1$s</string>
+</resources>

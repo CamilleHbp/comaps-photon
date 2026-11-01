@@ -1630,3 +1630,95 @@ UNIT_CLASS_TEST(Runner, Bookmarks_TestSaveRoute)
 }
 
 }  // namespace bookmarks_test
+
+#include "kml/osmand.hpp"
+#include <cstdlib>
+namespace bookmarks_test
+{
+UNIT_CLASS_TEST(Runner, OsmAnd_ImportPersistenceEditingMovingAndRetry)
+{
+  BookmarkManager manager(BM_CALLBACKS);
+  manager.EnableTestMode(true);
+  std::string xml = R"(<gpx creator="OsmAnd"><wpt lat="48" lon="2"><name>Place</name><type>Food</type><time>2020-01-02T03:04:05Z</time></wpt><extensions><points_groups><group name="Food" hidden="true"/></points_groups></extensions></gpx>)";
+  auto source = kml::osmand::Parse(xml, "Imported").groups[0];
+  auto unrelated = manager.CreateBookmarkCategory("Food");
+  auto result = manager.ImportOsmAndGroup(source);
+  TEST(result.success, ());
+  TEST_EQUAL(result.added, 1, ());
+  auto groups = manager.GetUnsortedBmGroupsIdList();
+  auto imported = groups[0] == unrelated ? groups[1] : groups[0];
+  TEST_NOT_EQUAL(manager.GetCategoryName(imported), "Food", ());
+  TEST(!manager.IsVisible(imported), ());
+  auto id = *manager.GetUserMarkIds(imported).begin();
+  TEST_EQUAL(manager.GetBookmark(id)->GetData().m_timestamp, source.m_bookmarksData[0].m_timestamp, ());
+  auto path = manager.GetCategoryFileName(imported);
+  auto saved = LoadKmlFile(path, KmlFileType::Text);
+  TEST(saved, ());
+  TEST_EQUAL(saved->m_bookmarksData[0].m_properties, source.m_bookmarksData[0].m_properties, ());
+  {
+    auto edit = manager.GetEditSession();
+    edit.SetCategoryName(imported, "Renamed");
+    auto data = manager.GetBookmark(id)->GetData();
+    kml::SetDefaultStr(data.m_name, "Edited locally");
+    edit.UpdateBookmark(id, data);
+    edit.MoveBookmark(id, imported, unrelated);
+  }
+  result = manager.ImportOsmAndGroup(source);
+  TEST(result.success, ());
+  TEST_EQUAL(result.added, 0, ());
+  TEST_EQUAL(result.duplicates, 1, ());
+  TEST_EQUAL(kml::GetDefaultStr(manager.GetBookmark(id)->GetData().m_name), "Edited locally", ());
+  source.m_bookmarksData[0].m_properties[kml::osmand::kIdentity] += "new";
+  result = manager.ImportOsmAndGroup(source);
+  TEST(result.success, ());
+  TEST_EQUAL(result.added, 1, ());
+  TEST_EQUAL(manager.GetBmGroupsCount(), 2, ());
+  TEST_EQUAL(manager.GetCategoryName(imported), "Renamed", ());
+  TEST(!manager.IsVisible(imported), ());
+  // A directory at the destination simulates a failed atomic replacement.
+  TEST(base::DeleteFileX(path), ());
+  TEST_EQUAL(Platform::MkDir(path), Platform::ERR_OK, ());
+  source.m_bookmarksData[0].m_properties[kml::osmand::kIdentity] += "failed";
+  result = manager.ImportOsmAndGroup(source);
+  TEST(!result.success, ());
+  TEST_EQUAL(manager.GetUserMarkIds(imported).size(), 1, ());
+  TEST_EQUAL(Platform::RmDir(path), Platform::ERR_OK, ());
+  result = manager.ImportOsmAndGroup(source);
+  TEST(result.success, ());
+  TEST_EQUAL(result.added, 1, ());
+  auto edit = manager.GetEditSession();
+  edit.DeleteBmCategory(imported, true);
+  edit.DeleteBmCategory(unrelated, true);
+}
+UNIT_CLASS_TEST(Runner, OsmAnd_PrivateBackupImport)
+{
+  auto path = std::getenv("OSMAND_TEST_GPX");
+  if (!path) return;
+  std::string xml;
+  FileReader(path).ReadAsString(xml);
+  auto parsed = kml::osmand::Parse(xml, "Imported places");
+  BookmarkManager manager(BM_CALLBACKS);
+  manager.EnableTestMode(true);
+  size_t added = 0;
+  for (auto const & group : parsed.groups)
+  {
+    auto result = manager.ImportOsmAndGroup(group);
+    TEST(result.success, ());
+    added += result.added;
+  }
+  TEST_EQUAL(added, 355, ());
+  TEST_EQUAL(manager.GetBmGroupsCount(), 4, ());
+  size_t duplicates = 0;
+  for (auto const & group : parsed.groups)
+  {
+    auto result = manager.ImportOsmAndGroup(group);
+    TEST(result.success, ());
+    TEST_EQUAL(result.added, 0, ());
+    duplicates += result.duplicates;
+  }
+  TEST_EQUAL(duplicates, 355, ());
+  auto ids = manager.GetUnsortedBmGroupsIdList();
+  auto edit = manager.GetEditSession();
+  for (auto id : ids) edit.DeleteBmCategory(id, true);
+}
+}

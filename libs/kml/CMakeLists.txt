@@ -1,6 +1,8 @@
 project(kml)
 
 set(SRC
+  osmand.cpp
+  osmand.hpp
   color_parser.cpp
   color_parser.hpp
   header_binary.hpp
@@ -32,6 +34,7 @@ omim_add_library(${PROJECT_NAME} ${SRC})
 
 target_link_libraries(${PROJECT_NAME}
   PUBLIC
+    pugixml
     base
     coding
     drape

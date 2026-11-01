@@ -182,6 +182,11 @@ public class BookmarkCategoriesFragment extends BaseMwmRecyclerFragment<Bookmark
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item)
   {
+    if (item.getItemId() == R.id.osmand_import)
+    {
+      OsmAndImportActivity.start(requireActivity());
+      return true;
+    }
     if (item.getItemId() == R.id.bookmarks_search)
     {
       activateSearch();

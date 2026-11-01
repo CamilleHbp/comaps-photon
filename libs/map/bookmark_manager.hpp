@@ -38,6 +38,7 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -409,6 +410,10 @@ public:
   void FilterInvalidTracks(kml::TrackIdCollection & tracks) const;
 
   void EnableTestMode(bool enable);
+  // Call after a file-thread barrier, on the GUI thread. Each group is persisted atomically.
+  struct OsmAndImportResult { size_t added = 0; size_t duplicates = 0; bool success = false; };
+  OsmAndImportResult ImportOsmAndGroup(kml::FileData data);
+  std::set<std::string> GetOsmAndIdentities() const;
   bool SaveBookmarkCategory(kml::MarkGroupId groupId);
   bool SaveBookmarkCategory(kml::MarkGroupId groupId, Writer & writer, KmlFileType fileType) const;
 

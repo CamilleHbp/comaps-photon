@@ -1,3 +1,4 @@
+#include "kml/osmand.hpp"
 #include "map/bookmark_manager.hpp"
 #include "map/gps_tracker.hpp"
 #include "map/search_api.hpp"
@@ -3855,4 +3856,74 @@ bool BookmarkManager::EditSession::DeleteBmCategory(kml::MarkGroupId groupId, bo
 void BookmarkManager::EditSession::NotifyChanges()
 {
   m_bmManager.NotifyChanges(true /* saveChangesOnDisk */);
+}
+
+std::set<std::string> BookmarkManager::GetOsmAndIdentities() const
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  std::set<std::string> identities;
+  for (auto const & [id, bookmark] : m_bookmarks)
+  {
+    auto const & props = bookmark->GetData().m_properties;
+    if (auto it = props.find(kml::osmand::kIdentity); it != props.end()) identities.insert(it->second);
+  }
+  return identities;
+}
+
+BookmarkManager::OsmAndImportResult BookmarkManager::ImportOsmAndGroup(kml::FileData data)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  OsmAndImportResult result;
+  auto source = data.m_categoryData.m_properties.find(kml::osmand::kGroup);
+  if (source == data.m_categoryData.m_properties.end()) return result;
+  auto identities = GetOsmAndIdentities();
+  std::vector<kml::BookmarkData> additions;
+  for (auto & bookmark : data.m_bookmarksData)
+  {
+    auto identity = bookmark.m_properties.find(kml::osmand::kIdentity);
+    if (identity == bookmark.m_properties.end()) return result;
+    if (identities.insert(identity->second).second) additions.push_back(std::move(bookmark));
+    else ++result.duplicates;
+  }
+  if (additions.empty()) { result.success = true; return result; }
+  auto groupId = kml::kInvalidMarkGroupId;
+  for (auto const & [id, category] : m_categories)
+  {
+    auto const & props = category->GetCategoryData().m_properties;
+    auto it = props.find(kml::osmand::kGroup);
+    if (it != props.end() && it->second == source->second) { groupId = id; break; }
+  }
+  bool const created = groupId == kml::kInvalidMarkGroupId;
+  bool autoSave = true;
+  {
+    auto session = GetEditSession();
+    if (created)
+    {
+      SetUniqueName(data.m_categoryData, [this](auto const & name) { return !IsUsedCategoryName(name); });
+      groupId = CreateBookmarkCategory(std::move(data.m_categoryData), false);
+    }
+    auto * group = GetBmCategory(groupId);
+    if (!created) autoSave = group->IsAutoSaveEnabled();
+    group->EnableAutoSave(false);
+    std::vector<kml::MarkId> inserted;
+    for (auto & bookmark : additions)
+    {
+      bookmark.m_id = kml::kInvalidMarkId;
+      auto id = session.CreateBookmark(std::move(bookmark))->GetId();
+      session.AttachBookmark(id, groupId);
+      inserted.push_back(id);
+    }
+    try { result.success = SaveBookmarkCategory(groupId); }
+    catch (...) { result.success = false; }
+    if (result.success) result.added = inserted.size();
+    else
+    {
+      for (auto id : inserted) session.DeleteBookmark(id);
+      if (created) session.DeleteBmCategory(groupId, true);
+    }
+  }
+  if (HasBmCategory(groupId)) GetBmCategory(groupId)->EnableAutoSave(autoSave);
+  if (result.success) SaveMetadata();
+  NotifyCategoriesChanged();
+  return result;
 }

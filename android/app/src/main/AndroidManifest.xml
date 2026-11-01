@@ -93,6 +93,8 @@
       android:manageSpaceActivity="${applicationId}.ManageSpaceActivity"
       tools:targetApi="33">
 
+    <activity android:name="app.organicmaps.bookmarks.OsmAndImportActivity" android:exported="false" />
+
     <!-- Allows for config and orientation change without killing/restarting main activity -->
     <activity
       android:name="app.organicmaps.SplashActivity"
@@ -174,6 +176,7 @@
         <data android:mimeType="application/vnd.google-earth.kmz"/>
         <data android:mimeType="application/gpx"/>
         <data android:mimeType="application/gpx+xml"/>
+        <data android:mimeType="application/zip"/>
         <data android:mimeType="application/vnd.google-earth.kmz+xml"/>
       </intent-filter>
 
@@ -185,6 +188,7 @@
         <data android:mimeType="application/vnd.google-earth.kmz"/>
         <data android:mimeType="application/gpx"/>
         <data android:mimeType="application/gpx+xml"/>
+        <data android:mimeType="application/zip"/>
         <data android:mimeType="application/vnd.google-earth.kmz+xml"/>
       </intent-filter>
 

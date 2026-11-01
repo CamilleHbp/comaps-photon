@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="osmand_import_title">Importer depuis OsmAnd</string>
+  <string name="osmand_import_ungrouped">Lieux importés</string>
+  <string name="osmand_import_help">Choisissez des favoris OsmAnd (.gpx) ou une sauvegarde (.gpx.zip). Vous pouvez sélectionner plusieurs fichiers. Exportez ou partagez depuis OsmAnd, ou copiez la sauvegarde dans Documents : Android masque les dossiers Android/data des autres applications. Les fichiers originaux restent inchangés.</string>
+  <string name="osmand_import_choose">Choisir des fichiers</string>
+  <string name="osmand_import_error">Impossible de lire cette sauvegarde. Vérifiez que le fichier GPX ou GPX ZIP est valide et inférieur à 32 Mio, puis réessayez.</string>
+  <string name="osmand_import_not_osmand">Ce fichier ne contient pas de favoris OsmAnd. Utilisez l’importation habituelle des favoris pour les autres fichiers GPX, KML ou KMZ.</string>
+  <string name="osmand_import_empty">Aucun lieu enregistré valide trouvé.</string>
+  <string name="osmand_import_working">Préparation ou enregistrement des lieux…</string>
+  <string name="osmand_import_preview">Choisissez les listes à importer. Les lieux existants seront ignorés et vos modifications dans CoMaps conservées. Lieux invalides ignorés : %1$d.</string>
+  <string name="osmand_import_group">%1$s\n%2$d lieux · %3$d déjà inclus</string>
+  <string name="osmand_import_selected">Importer les listes sélectionnées</string>
+  <string name="osmand_import_result">%1$d lieux enregistrés. %2$d doublons ignorés. %3$d lieux invalides ignorés.</string>
+  <string name="osmand_import_failures">Enregistrement impossible : %1$s. Libérez de l’espace et réessayez ; les lieux enregistrés ne seront pas dupliqués.</string>
+  <string name="osmand_import_retry">Réessayer</string>
+  <string name="osmand_import_view_layers">Voir les calques</string>
+  <string name="osmand_import_done">Terminé</string>
+  <string name="saved_layers_actions">Actions pour %1$s</string>
+</resources>

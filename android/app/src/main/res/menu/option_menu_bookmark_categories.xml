@@ -7,4 +7,5 @@
         android:title="@string/sort"
         app:showAsAction="ifRoom"/>
 
+  <item android:id="@+id/osmand_import" android:title="@string/osmand_import_title" app:showAsAction="never" />
 </menu>
