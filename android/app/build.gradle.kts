@@ -224,7 +224,6 @@ android {
 
         debug {
             applicationIdSuffix = ".debug" // Allows installing debug and release builds together.
-            versionNameSuffix = "-debug"
             signingConfig = signingConfigs["debug"]
             resValue("string", "app_name", "$appName Debug")
         }
