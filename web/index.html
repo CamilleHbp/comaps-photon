@@ -4,14 +4,59 @@
 <main id="app">
   <section id="map" aria-label="Map"></section>
   <aside class="panel" aria-label="Explore">
-    <header class="brand"><img src="/icons/icon.svg" width="38" height="38" alt=""><div><h1>CoMaps<span> / Photon</span></h1><p data-i18n="tagline"></p></div><button id="settings-toggle" class="icon-button" aria-controls="settings" aria-expanded="false" data-label="settings"><i data-lucide="settings-2"></i></button></header>
+    <header class="brand"><img src="/icons/icon.svg" width="38" height="38" alt=""><div><h1>CoMaps<span> / Photon</span></h1></div><button id="settings-toggle" class="icon-button" aria-controls="settings" aria-expanded="false" data-label="settings"><i data-lucide="settings-2"></i></button></header>
     <form id="search-form" role="search"><label for="query" class="sr-only" data-i18n="searchLabel"></label><div class="search-box"><i data-lucide="search"></i><input id="query" type="search" autocomplete="off" maxlength="200" data-placeholder="searchPlaceholder"><button type="submit" class="icon-button search-submit" data-label="search"><i data-lucide="arrow-right"></i></button></div></form>
-    <nav class="tabs" aria-label="Places"><button id="explore-tab" class="active" aria-pressed="true"><i data-lucide="compass"></i><span data-i18n="explore"></span></button><button id="saved-tab" aria-pressed="false"><i data-lucide="bookmark"></i><span data-i18n="saved"></span><span id="saved-count">0</span></button></nav>
-    <section id="settings" hidden><h2 data-i18n="settings"></h2><label for="language" data-i18n="language"></label><select id="language"><option value="auto" data-i18n="automatic"></option><option value="en">English</option><option value="fr">Français</option></select><h3 data-i18n="about"></h3><p data-i18n="aboutText"></p><p data-i18n="privacy"></p><p data-i18n="offlineInfo"></p><button id="install" class="primary" data-i18n="install"></button><p id="install-help" data-i18n="installHelp"></p><a href="https://www.comaps.app/" target="_blank" rel="noopener" data-i18n="nativeInfo"></a></section>
-    <section id="browse"><div id="intro"><h2 data-i18n="introTitle"></h2><p data-i18n="introText"></p><div class="suggestions"><button data-query="coffee"><i data-lucide="coffee"></i><span data-i18n="coffee"></span></button><button data-query="parks"><i data-lucide="trees"></i><span data-i18n="parks"></span></button><button data-query="food"><i data-lucide="utensils"></i><span data-i18n="food"></span></button></div><div class="hint"><i data-lucide="map-pin"></i><p data-i18n="mapHint"></p></div></div><div id="results-header" hidden><h2 id="results-title"></h2><button id="clear" class="text-button" data-i18n="clear"></button></div><p id="status" role="status" aria-live="polite"></p><ol id="results"></ol></section>
+    <nav class="tabs" aria-label="Places"><button id="explore-tab" class="active" aria-pressed="true"><i data-lucide="compass"></i><span data-i18n="explore"></span></button><button id="saved-tab" aria-pressed="false"><i data-lucide="bookmark"></i><span data-i18n="saved"></span><span id="saved-count">0</span></button><button id="directions-tab"><i data-lucide="route"></i><span data-i18n="directions"></span></button></nav>
+    <section id="settings" hidden><h2 id="settings-title" tabindex="-1" data-i18n="settings"></h2><label for="language" data-i18n="language"></label><select id="language"><option value="auto" data-i18n="automatic"></option><option value="en">English</option><option value="fr">Français</option></select><h3 data-i18n="routePlanner"></h3><label for="route-endpoint" data-i18n="routeEndpoint"></label><input id="route-endpoint" type="url" placeholder="https://…" autocomplete="off" spellcheck="false"><p data-i18n="routeEndpointHint"></p><label class="check"><input id="route-consent" type="checkbox"><span data-i18n="routeConsent"></span></label><h3 data-i18n="about"></h3><p data-i18n="aboutText"></p><p data-i18n="privacy"></p><p data-i18n="offlineInfo"></p><button id="install" class="primary" data-i18n="install"></button><p id="install-help" data-i18n="installHelp"></p><a href="https://www.comaps.app/" target="_blank" rel="noopener" data-i18n="nativeInfo"></a></section>
+    <section id="browse"><div id="intro"><h2 data-i18n="nearby"></h2><div class="suggestions"><button data-query="coffee"><i data-lucide="coffee"></i><span data-i18n="coffee"></span></button><button data-query="parks"><i data-lucide="trees"></i><span data-i18n="parks"></span></button><button data-query="food"><i data-lucide="utensils"></i><span data-i18n="food"></span></button></div><div class="hint"><i data-lucide="map-pin"></i><p data-i18n="pinHint"></p></div></div><div id="results-header" hidden><h2 id="results-title"></h2><button id="clear" class="text-button" data-i18n="clear"></button></div><p id="status" role="status" aria-live="polite"></p><button id="retry-search" class="text-button" data-i18n="retryRoute" hidden></button><ol id="results"></ol><button id="list-size" class="text-button" aria-controls="results" aria-expanded="false" hidden></button></section>
     <section id="place" hidden aria-label="Place details"></section>
+    <section id="planner" hidden aria-labelledby="planner-title">
+      <header class="planner-header">
+        <button id="planner-back" class="icon-button" data-label="back"><i data-lucide="arrow-left"></i></button>
+        <h2 id="planner-title" tabindex="-1" data-i18n="routeSummary"></h2>
+      </header>
+      <form id="route-form" class="route-planner">
+        <div class="route-stops">
+          <div class="route-stop">
+            <label for="route-origin" data-i18n="routeOrigin"></label>
+            <input id="route-origin" data-placeholder="routeOriginHint" maxlength="500">
+            <button type="button" id="route-my-location" class="icon-button" data-label="routeMyLocation"><i data-lucide="locate-fixed"></i></button>
+          </div>
+          <div class="route-stop">
+            <label for="route-destination" data-i18n="routeDestination"></label>
+            <input id="route-destination" data-placeholder="destinationHint" maxlength="500">
+          </div>
+        </div>
+        <button id="add-stop" type="button" class="stop-action"><i data-lucide="plus"></i><span data-i18n="addStop"></span></button>
+        <details id="route-options">
+          <summary><i data-lucide="sliders-horizontal"></i><span id="route-options-label"></span><i data-lucide="chevron-down"></i></summary>
+          <label class="check"><input id="avoid-tolls" type="checkbox"><span data-i18n="avoidTolls"></span></label>
+          <label class="check"><input id="avoid-motorways" type="checkbox"><span data-i18n="avoidMotorways"></span></label>
+        </details>
+        <p id="route-disclosure"></p>
+        <button type="submit" id="route" class="primary"><i data-lucide="route"></i><span></span></button>
+      </form>
+      <p id="route-feedback" role="status"></p>
+      <div id="route-summary"></div>
+      <details id="route-places" hidden>
+        <summary><i data-lucide="search"></i><span data-i18n="addStop"></span></summary>
+        <div class="along-controls">
+          <form id="along-form" class="search-box">
+            <input id="along-query" type="search" maxlength="200" data-placeholder="alongQuery" data-label="alongQuery">
+            <button type="submit" class="icon-button" data-label="search"><i data-lucide="search"></i></button>
+          </form>
+          <label class="radius-label" for="place-radius"><span data-i18n="routeRadius"></span><output id="radius-value" for="place-radius">1 km</output></label>
+          <input id="place-radius" type="range" min="1" max="100" value="1" step="1">
+          <div id="place-categories" role="group" data-label="placeCategory"></div>
+          <p class="along-note" data-i18n="nearbyDisclosure"></p>
+          <p id="along-status" role="status"></p>
+          <ol id="along-results"></ol>
+          <button id="more-places" class="stop-action" data-i18n="morePlaces" hidden></button>
+        </div>
+      </details>
+    </section>
     <footer class="panel-footer"><span class="connection"><span id="connection-dot"></span><span id="connection-text"></span></span><a href="https://github.com/komoot/photon" target="_blank" rel="noopener">Photon</a><span>·</span><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></footer>
   </aside>
   <div class="map-tools"><button id="locate" class="icon-button" data-label="locate"><i data-lucide="locate-fixed"></i></button><div class="zoom"><button id="zoom-in" class="icon-button" data-label="zoomIn"><i data-lucide="plus"></i></button><button id="zoom-out" class="icon-button" data-label="zoomOut"><i data-lucide="minus"></i></button></div></div>
-  <div id="offline-banner" hidden data-i18n="offlineBanner"></div><div id="toast" role="status" hidden></div>
+  <div id="offline-banner" hidden data-i18n="offlineBanner"></div><div id="toast" role="status" hidden></div><div id="place-feedback" class="sr-only" role="status"></div>
 </main><script type="module" src="/src/main.js"></script></body></html>
