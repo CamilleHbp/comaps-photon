@@ -1,6 +1,6 @@
 # Maps for the web
 
-Search for an address, save a meeting point or plan a drive with several stops. [Open Maps](https://maps.camille.studio) · [Get the Android app](../README.md)
+Search for an address, save a meeting point or plan a drive with several stops. [Self-host the web map](#hosting) · [Maps for Android](../README.md)
 
 ## Find a place and plan a route
 
@@ -27,9 +27,7 @@ Production output is `dist/`. The build generates a content-versioned service wo
 
 ## Hosting
 
-Serve `dist/` over HTTPS at `maps.camille.studio`. During the address change, existing installs can also open `comaps.camille.studio` to transfer their saved places. Active names need an A record for the homeserver (`195.15.214.30`). The supplied `deploy/compose.yaml` runs a static, unprivileged Nginx container on the existing `homeserver-web` network. Place its `dist/`, `nginx.conf`, and compose file together under `/srv/homeserver/apps/comaps-photon-web/`. Append `deploy/Caddyfile` to the homeserver's Caddy configuration, validate it, and restart only the Caddy proxy with `docker compose restart caddy` (its admin API is disabled and this binary does not implement SIGUSR1 reloads).
-
-Do not replace the homeserver Caddyfile or restart unrelated application services. Serve HTML, the manifest, and `sw.js` with revalidation; hashed assets may be immutable. Unknown asset paths must return 404.
+Serve the contents of `dist/` at the root of your own HTTPS site. Configure your static host to revalidate HTML, the manifest and `sw.js` on each visit. Hashed assets can use immutable caching. Return HTTP 404 for missing assets. Keep using the same origin so installed browsers retain their saved places.
 
 ## Data services and credits
 

@@ -2,7 +2,7 @@
 
 Download a region before a trip to search streets, save places and navigate offline on Android. In a browser, you can plan a drive with several stops and share a place by its coordinates.
 
-[Open the web map](https://maps.camille.studio) · [Download Maps for Android](https://download.camille.studio/#comaps-photon)
+[Self-host the web map](web/README.md#hosting) · [Build Maps for Android](docs/INSTALL.md)
 
 ## Plan a drive
 
