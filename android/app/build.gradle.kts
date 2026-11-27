@@ -226,7 +226,6 @@ android {
         debug {
             applicationIdSuffix = ".debug" // Allows installing debug and release builds together.
             signingConfig = signingConfigs["debug"]
-            resValue("string", "app_name", "$appName Debug")
         }
         release {
             if (taskName.contains("release")) {
@@ -243,7 +242,6 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            resValue("string", "app_name", appName)
         }
 
         create("beta") {
@@ -263,7 +261,6 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             matchingFallbacks += "release" // Use dependencies of "release" build type.
-            resValue("string", "app_name", "$appName Test")
         }
     }
 
