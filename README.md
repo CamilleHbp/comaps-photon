@@ -26,4 +26,6 @@ See the [web guide](web/README.md) for hosting and data-service details. The [bu
 
 ## Credits and licenses
 
+The Android update checker uses the [Apache-licensed updater 1.0.6 source](https://github.com/CamilleHbp/android-updater/tree/v1.0.6).
+
 The native code uses the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) and the [component credits](data/copyright.html) for the original authors, libraries and artwork. Map data comes from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) under the Open Database License.
