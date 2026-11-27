@@ -1,0 +1,18 @@
+<resources>
+  <string-array name="route_stop_choices">
+    <item>All place types</item>
+    <item>Gas stations</item>
+    <item>Hostels</item>
+    <item>Restaurants</item>
+    <item>Cafés</item>
+    <item>EV charging</item>
+    <item>Toilets</item>
+  </string-array>
+  <string name="route_stop_radius">Maximum distance from route: %1$d km</string>
+  <string name="route_stop_searching">Finding places along the route…</string>
+  <string name="route_stop_empty">No matching places within your search distance.</string>
+  <string name="route_stop_error">Place search is unavailable. Try again.</string>
+  <string name="route_stop_query">Search by name along route</string>
+  <string name="route_stop_location">Choose location</string>
+  <string name="route_stop_result">%1$s\n%2$.1f km from route · %3$.1f km from start</string>
+</resources>

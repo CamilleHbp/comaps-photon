@@ -10,4 +10,10 @@
   <string name="saved_layers_zoom">Voir sur la carte</string>
   <plurals name="saved_layers_places"><item quantity="one">%d lieu</item><item quantity="other">%d lieux</item></plurals>
   <plurals name="saved_layers_tracks"><item quantity="one">%d trace</item><item quantity="other">%d traces</item></plurals>
+  <string name="saved_layers_panel_title">Calques</string>
+  <string name="saved_layers_options">Options des calques</string>
+  <string name="saved_layers_visible">%1$d sur %2$d visibles</string>
+  <string name="saved_layers_clear_search">Effacer la recherche</string>
+  <string name="saved_layers_empty">Vos listes apparaîtront ici. Ajoutez des lieux dans les Favoris ou importez-les depuis les options des calques.</string>
+  <string name="saved_layers_no_results">Aucune liste correspondante. Essayez un autre nom ou effacez la recherche.</string>
 </resources>

@@ -1,59 +1,94 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="@dimen/height_block_base"
-  android:baselineAligned="false">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?windowBackgroundForced"
+    android:orientation="vertical"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="4dp">
   <LinearLayout
-    android:id="@+id/btn__search_point"
-    android:layout_width="0dp"
-    android:layout_weight="1"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:background="?clickableBackground">
-    <com.google.android.material.imageview.ShapeableImageView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:srcCompat="@drawable/ic_search"
-      app:tint="?colorSecondary"
-      android:layout_marginStart="@dimen/margin_base"
-      android:layout_marginEnd="@dimen/margin_base"/>
-    <com.google.android.material.textview.MaterialTextView
-      android:id="@+id/tv__message"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:textAppearance="@style/MwmTextAppearance.Body3"
-      android:layout_marginEnd="@dimen/margin_base"
-      android:layout_marginTop="@dimen/routing_action_panel_margin_vert"
-      android:layout_marginBottom="@dimen/routing_action_panel_margin_vert"
-      android:textColor="?colorSecondary"
-      tools:text="Add start point to plan a route."/>
+      android:gravity="center_vertical">
+    <LinearLayout
+        android:id="@+id/route_start_row"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:minHeight="52dp"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:background="?clickableBackground"
+        android:focusable="true">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/planner_from"
+          android:textSize="12sp"
+          android:textColor="?android:textColorSecondary" />
+      <TextView
+          android:id="@+id/route_start_value"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:ellipsize="end"
+          android:textSize="16sp"
+          android:textColor="?android:textColorPrimary"
+          android:textColorHint="?colorSecondary"
+          android:hint="@string/planner_choose_start" />
+    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn__my_position_use"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="@string/planner_use_location"
+        android:textAllCaps="false"
+        app:icon="@drawable/ic_location_crosshair"
+        app:iconGravity="textStart" />
   </LinearLayout>
+  <include layout="@layout/item_divider" />
   <LinearLayout
-    android:id="@+id/btn__my_position_use"
-    android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:background="?clickableBackground"
-    android:visibility="gone"
-    tools:visibility="visible">
-    <View
-      android:layout_width="1dp"
-      android:layout_height="match_parent"
-      android:layout_marginBottom="@dimen/margin_half"
-      android:layout_marginTop="@dimen/margin_half"
-      android:background="?dividerHorizontal"/>
-    <com.google.android.material.imageview.ShapeableImageView
-      android:id="@+id/iv__icon"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_margin="@dimen/margin_base"
-      app:srcCompat="@drawable/ic_location_crosshair"
-      tools:tint="?colorSecondary"/>
+      android:gravity="center_vertical">
+    <LinearLayout
+        android:id="@+id/route_finish_row"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:minHeight="52dp"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:background="?clickableBackground"
+        android:focusable="true">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/planner_to"
+          android:textSize="12sp"
+          android:textColor="?android:textColorSecondary" />
+      <TextView
+          android:id="@+id/route_finish_value"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:ellipsize="end"
+          android:textSize="16sp"
+          android:textColor="?android:textColorPrimary"
+          android:textColorHint="?colorSecondary"
+          android:hint="@string/planner_choose_finish" />
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/swap_endpoints"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?clickableBackground"
+        android:contentDescription="@string/planner_swap"
+        app:srcCompat="@drawable/ic_swap_route"
+        app:tint="?iconTint" />
   </LinearLayout>
 </LinearLayout>

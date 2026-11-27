@@ -34,7 +34,7 @@
     <string name="country_status_download_failed">Nie udało się pobrać</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Spróbuj ponownie</string>
-    <string name="about_menu_title">O aplikacji CoMaps</string>
+    <string name="about_menu_title">O aplikacji Maps</string>
     <!-- Text in About screen -->
     <string name="about_headline">Otwarty projekt tworzony przez społeczność</string>
     <!-- Text in About screen -->
@@ -51,7 +51,7 @@
     <string name="unsupported_phone">Wymagana jest sprzętowa akceleracja OpenGL. Aktualne urządzenie nie jest obsługiwane.</string>
     <string name="download">Pobierz</string>
     <!-- Used in DownloadResources startup screen -->
-    <string name="disconnect_usb_cable">Proszę odłączyć kabel USB albo włożyć kartę pamięci, aby korzystać z CoMaps</string>
+    <string name="disconnect_usb_cable">Proszę odłączyć kabel USB albo włożyć kartę pamięci, aby korzystać z Maps</string>
     <!-- Used in DownloadResources startup screen -->
     <string name="not_enough_free_space_on_sdcard">Proszę zwolnić trochę pamięci na karcie SD/pamięci USB, aby korzystać z aplikacji</string>
     <string name="download_resources">Przed rozpoczęciem prosimy o pobranie ogólnej mapy świata na urządzenie. \nWymaga to %s danych.</string>
@@ -148,8 +148,8 @@
     <!-- Notes field in Bookmarks view -->
     <string name="description">Notatki</string>
     <!-- Email Subject when sharing bookmark list -->
-    <string name="share_bookmarks_email_subject">Moje ulubione miejsca z CoMaps</string>
-    <string name="share_bookmarks_email_body">Cześć! \n \nZałączam moje ulubione miejsca - otworzysz je w aplikacji CoMaps. Jeżeli nie masz tej aplikacji, możesz ją pobrać stąd: https://www.comaps.app/download/ \n \nMiłego podróżowania z CoMaps!</string>
+    <string name="share_bookmarks_email_subject">Moje ulubione miejsca z Maps</string>
+    <string name="share_bookmarks_email_body">Cześć! \n \nZałączam moje ulubione miejsca - otworzysz je w aplikacji CoMaps. Jeżeli nie masz tej aplikacji, możesz ją pobrać stąd: https://www.comaps.app/download/ \n \nMiłego podróżowania z Maps!</string>
     <!-- message title of loading file -->
     <string name="load_kmz_title">Wczytywanie Ulubionych</string>
     <!-- Kmz file successful loading -->
@@ -169,9 +169,9 @@
     <!-- Alert message that downloading is in progress. -->
     <string name="downloading_is_active">Trwa pobieranie mapy</string>
     <!-- Share my position using SMS, %1$@ contains om:// and %2$@ https://comaps.app link WITHOUT NAME. @NOTE non-ascii symbols in the link will result in max 70 characters SMS instead of 140. -->
-    <string name="my_position_share_sms">Hej, spójrz na moją aktualną lokalizację w CoMaps! %1$s lub %2$s Nie masz map offline? Pobierz tutaj: https://www.comaps.app/download/</string>
+    <string name="my_position_share_sms">Hej, spójrz na moją aktualną lokalizację w Maps! %1$s lub %2$s Nie masz map offline? Pobierz tutaj: https://www.comaps.app/download/</string>
     <!-- Subject for emailed position -->
-    <string name="my_position_share_email_subject">Hej, sprawdź moją aktualną lokalizację na mapie CoMaps!</string>
+    <string name="my_position_share_email_subject">Hej, sprawdź moją aktualną lokalizację na mapie Maps!</string>
     <!-- Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. -->
     <string name="share">Udostępnij</string>
     <!-- Share by email button text, also used in editor and About. -->
@@ -474,7 +474,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">Uwaga dla wolontariuszy OpenStreetMap (opcjonalnie)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">Opisz błędy na mapie lub elementy, których nie można edytować w CoMaps</string>
+    <string name="editor_note_hint">Opisz błędy na mapie lub elementy, których nie można edytować w Maps</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">Państwa zmiany są przesyłane do publicznej bazy danych <a href="https://wiki.openstreetmap.org/wiki/Pl:Wstęp">OpenStreetMap</a>. Prosimy nie dodawać informacji osobistych lub chronionych prawem autorskim.</string>
     <string name="editor_more_about_osm">Więcej o OpenStreetMap</string>
@@ -484,7 +484,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations... -->
     <string name="operator">Operator: %s</string>
     <string name="editor_category_unsuitable_title">Nie możesz znaleźć odpowiedniej kategorii?</string>
-    <string name="editor_category_unsuitable_text">CoMaps pozwala na dodawanie tylko prostych kategorii punktów, co oznacza niemożność dodawania miast, dróg, jezior, obrysów budynków itp. Dodaj takie kategorie bezpośrednio do <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sprawdź nasz <a href="https://www.comaps.app/support/advanced-map-editing/">przewodnik</a>, aby uzyskać szczegółowe instrukcje krok po kroku.</string>
+    <string name="editor_category_unsuitable_text">Maps pozwala na dodawanie tylko prostych kategorii punktów, co oznacza niemożność dodawania miast, dróg, jezior, obrysów budynków itp. Dodaj takie kategorie bezpośrednio do <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sprawdź nasz <a href="https://www.comaps.app/support/advanced-map-editing/">przewodnik</a>, aby uzyskać szczegółowe instrukcje krok po kroku.</string>
     <string name="downloader_no_downloaded_maps_title">Nie pobrano żadnych map</string>
     <string name="downloader_no_downloaded_maps_message">Pobierz mapy, aby wyszukiwać miejsca i nawigować bez połączenia z internetem</string>
     <string name="current_location_unknown_error_title">Bieżąca lokalizacja jest nieznana</string>
@@ -536,7 +536,7 @@
     <string name="mobile_data_option_ask">Zawsze pytaj</string>
     <string name="traffic_update_maps_text">Aby wyświetlić dane o ruchu, mapy muszą zostać zaktualizowane.</string>
     <string name="increase_font_size">Powiększ rozmiar czcionki na mapie</string>
-    <string name="traffic_update_app">Zaktualizuj CoMaps</string>
+    <string name="traffic_update_app">Zaktualizuj Maps</string>
     <!-- "traffic" as in "road congestion" -->
     <string name="traffic_data_unavailable">Dane o ruchu są niedostępne</string>
     <string name="enable_logging">Włącz zbieranie danych</string>
@@ -752,9 +752,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">Naszym głównym celem jest tworzenie szybkich, zapewniających prywatność i łatwych w użyciu map, które pokochasz.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Korzystasz teraz z CoMaps na ekranie telefonu</string>
+    <string name="car_used_on_the_phone_screen">Korzystasz teraz z Maps na ekranie telefonu</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Korzystasz teraz z CoMaps na ekranie samochodu</string>
+    <string name="car_used_on_the_car_screen">Korzystasz teraz z Maps na ekranie samochodu</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">Jesteś połączony z Android Auto</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -762,11 +762,11 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">Do ekranu samochodu</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">Aplikacja CoMaps wymaga dostępu do lokalizacji. Gdy będzie to bezpieczne, sprawdź powiadomienie w telefonie.</string>
+    <string name="aa_location_permissions_request">Aplikacja Maps wymaga dostępu do lokalizacji. Gdy będzie to bezpieczne, sprawdź powiadomienie w telefonie.</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">Ta aplikacja wymaga Twojej zgody</string>
     <!-- The text in the activity for location permission request. -->
-    <string name="aa_request_permission_activity_text">CoMaps w Android Auto wymagają uprawnień do lokalizacji, aby działać efektywnie</string>
+    <string name="aa_request_permission_activity_text">Maps w Android Auto wymagają uprawnień do lokalizacji, aby działać efektywnie</string>
     <!-- Grant Permissions button. -->
     <string name="aa_grant_permissions">Przyznaj uprawnienia</string>
     <!-- Outdoors/hiking map style (activity) name in the Styles and Layers dialog -->
@@ -937,7 +937,7 @@
     <string name="route_finished">Trasa ukończona</string>
     <string name="not_following_route">Bez podążania trasą</string>
     <string name="pref_openexternallinks_title">Automatycznie otwieraj odnośniki stron trzecich</string>
-    <string name="pref_openexternallinks_summary">Domyślnie otwieraj odnośniki stron trzecich w CoMaps</string>
+    <string name="pref_openexternallinks_summary">Domyślnie otwieraj odnośniki stron trzecich w Maps</string>
     <string name="population">Liczba ludności: %s</string>
     <string name="destination">Cel</string>
     <string name="stop">Punkt pośredni</string>
@@ -989,7 +989,7 @@
     <string name="capacity_charging">Stanowiska postojowe z ładowarką: %s</string>
     <string name="capacity_charging_yes">Ma stanowiska postojowe z ładowarką</string>
     <string name="capacity_charging_no">Brak stanowisk postojowych z ładowarką</string>
-    <string name="permission_read_navigation_label">Odczytuj dane nawigacyjne CoMaps</string>
+    <string name="permission_read_navigation_label">Odczytuj dane nawigacyjne Maps</string>
     <string name="permission_read_navigation_description">Odczytuj na żywo informacje nawigacyjne, takie jak nadchodzące zakręty lub nazwa drogi, na której się znajdujesz</string>
     <string name="place_reviews_title">Recenzje miejsca</string>
     <string name="place_reviews">Recenzje %1$s</string>

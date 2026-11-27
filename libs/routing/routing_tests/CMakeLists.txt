@@ -1,6 +1,8 @@
 project(routing_tests)
 
 set(SRC
+  car_router_tests.cpp
+  valhalla_route_tests.cpp
   lanes/lanes_parser_tests.cpp
   lanes/lanes_recommendation_tests.cpp
   applying_traffic_test.cpp
@@ -49,6 +51,7 @@ set(SRC
 )
 
 omim_add_test(${PROJECT_NAME} ${SRC})
+target_compile_definitions(${PROJECT_NAME} PRIVATE VALHALLA_FIXTURE_PATH="${CMAKE_SOURCE_DIR}/data/test_data/valhalla/route.json")
 
 target_link_libraries(${PROJECT_NAME}
   PUBLIC

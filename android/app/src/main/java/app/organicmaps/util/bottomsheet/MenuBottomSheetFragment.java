@@ -88,6 +88,9 @@ public class MenuBottomSheetFragment extends BottomSheetDialogFragment
       behavior.setMaxHeight((int) (screenHeight * 0.8f));
       behavior.setPeekHeight((int) (screenHeight * 0.55f));
       behavior.setSkipCollapsed(false);
+      // Leave the map in view on phones; landscape needs the full height to expose list rows.
+      boolean landscape = screenHeight < getResources().getDisplayMetrics().widthPixels;
+      behavior.setState(landscape ? BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_COLLAPSED);
     }
   }
 
@@ -118,7 +121,7 @@ public class MenuBottomSheetFragment extends BottomSheetDialogFragment
       recyclerView.setAdapter(menuAdapter);
       recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
     }
-    if (mHeaderFragment != null)
+    if (mHeaderFragment != null && getChildFragmentManager().findFragmentById(R.id.bottom_sheet_menu_header) == null)
       getChildFragmentManager().beginTransaction().add(R.id.bottom_sheet_menu_header, mHeaderFragment).commit();
 
     // If there is nothing to show, hide the sheet

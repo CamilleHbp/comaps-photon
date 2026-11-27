@@ -34,7 +34,7 @@
     <string name="country_status_download_failed">Unduhan gagal</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Coba Lagi</string>
-    <string name="about_menu_title">Tentang CoMaps</string>
+    <string name="about_menu_title">Tentang Maps</string>
     <!-- Text in About screen -->
     <string name="about_proposition_1">• Mudah digunakan dan dipoles</string>
     <!-- Text in About screen -->
@@ -49,7 +49,7 @@
     <string name="unsupported_phone">Aplikasi ini membutuhkan akselerasi perangkat keras OpenGL. Sayangnya, perangkat Anda tidak didukung.</string>
     <string name="download">Unduh</string>
     <!-- Used in DownloadResources startup screen -->
-    <string name="disconnect_usb_cable">Silakan cabut kabel USB atau masukkan kartu memori untuk menggunakan CoMaps</string>
+    <string name="disconnect_usb_cable">Silakan cabut kabel USB atau masukkan kartu memori untuk menggunakan Maps</string>
     <!-- Used in DownloadResources startup screen -->
     <string name="not_enough_free_space_on_sdcard">Silakan kosongkan ruang di kartu SD/penyimpanan USB terlebih dahulu untuk menggunakan aplikasi ini</string>
     <string name="download_resources">Sebelum mulai menggunakan aplikasi, silakan unduh peta tinjauan dunia ke perangkat Anda. \nIni akan menggunakan %s penyimpanan.</string>
@@ -142,7 +142,7 @@
     <!-- Notes field in Bookmarks view -->
     <string name="description">Catatan</string>
     <!-- Email Subject when sharing bookmark list -->
-    <string name="share_bookmarks_email_subject">Favorit CoMaps Saya</string>
+    <string name="share_bookmarks_email_subject">Favorit Maps Saya</string>
     <!-- message title of loading file -->
     <string name="load_kmz_title">Memuat Favorit</string>
     <!-- Kmz file successful loading -->
@@ -162,9 +162,9 @@
     <!-- Alert message that downloading is in progress. -->
     <string name="downloading_is_active">Unduhan peta sedang berlangsung</string>
     <!-- Share my position using SMS, %1$@ contains om:// and %2$@ https://comaps.app link WITHOUT NAME. @NOTE non-ascii symbols in the link will result in max 70 characters SMS instead of 140. -->
-    <string name="my_position_share_sms">Lihat lokasi saya saat ini di CoMaps! %1$s atau %2$s Belum punya peta offline? Unduh di sini: https://www.comaps.app/download/</string>
+    <string name="my_position_share_sms">Lihat lokasi saya saat ini di Maps! %1$s atau %2$s Belum punya peta offline? Unduh di sini: https://www.comaps.app/download/</string>
     <!-- Subject for emailed position -->
-    <string name="my_position_share_email_subject">Hei, lihat lokasi saya saat ini di peta CoMaps!</string>
+    <string name="my_position_share_email_subject">Hei, lihat lokasi saya saat ini di peta Maps!</string>
     <!-- Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. -->
     <string name="share">Bagikan</string>
     <!-- Share by email button text, also used in editor and About. -->
@@ -456,7 +456,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">Catatan untuk sukarelawan OpenStreetMap (opsional)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">Jelaskan kesalahan pada peta atau hal-hal yang tidak dapat diedit dengan CoMaps</string>
+    <string name="editor_note_hint">Jelaskan kesalahan pada peta atau hal-hal yang tidak dapat diedit dengan Maps</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">Hasil edit Anda diunggah ke basis data publik <a href="https://wiki.openstreetmap.org/wiki/About_OpenStreetMap">OpenStreetMap</a>. Harap jangan menambahkan informasi pribadi atau berhak cipta.</string>
     <string name="editor_more_about_osm">Lebih lanjut tentang OpenStreetMap</string>
@@ -466,7 +466,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations... -->
     <string name="operator">Operator: %s</string>
     <string name="editor_category_unsuitable_title">Tidak dapat menemukan kategori yang sesuai?</string>
-    <string name="editor_category_unsuitable_text">CoMaps hanya dapat menambahkan kategori titik sederhana, tidak dapat menambahkan kota, jalan, danau, garis bangunan, dll. Silakan tambahkan kategori tersebut langsung ke <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Periksa <a href="https://www.comaps.app/support/advanced-map-editing/">panduan</a> kami untuk instruksi langkah demi langkah yang terperinci.</string>
+    <string name="editor_category_unsuitable_text">Maps hanya dapat menambahkan kategori titik sederhana, tidak dapat menambahkan kota, jalan, danau, garis bangunan, dll. Silakan tambahkan kategori tersebut langsung ke <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Periksa <a href="https://www.comaps.app/support/advanced-map-editing/">panduan</a> kami untuk instruksi langkah demi langkah yang terperinci.</string>
     <string name="downloader_no_downloaded_maps_title">Anda belum mengunduh peta apa pun</string>
     <string name="downloader_no_downloaded_maps_message">Unduh peta untuk mencari dan menavigasi secara offline</string>
     <string name="current_location_unknown_error_title">Lokasi saat ini tidak diketahui</string>
@@ -512,7 +512,7 @@
     <string name="mobile_data_option_ask">Selalu Tanya</string>
     <string name="traffic_update_maps_text">Untuk menampilkan data lalu lintas, peta harus diperbarui</string>
     <string name="increase_font_size">Tingkatkan ukuran label peta</string>
-    <string name="traffic_update_app">Silakan perbarui CoMaps</string>
+    <string name="traffic_update_app">Silakan perbarui Maps</string>
     <!-- "traffic" as in "road congestion" -->
     <string name="traffic_data_unavailable">Data lalu lintas tidak tersedia</string>
     <string name="enable_logging">Aktifkan pencatatan (logging)</string>
@@ -702,9 +702,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">Tujuan utama kami adalah membangun peta yang cepat, berfokus pada privasi, dan mudah digunakan yang akan Anda sukai.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Anda sekarang menggunakan CoMaps di layar ponsel</string>
+    <string name="car_used_on_the_phone_screen">Anda sekarang menggunakan Maps di layar ponsel</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Anda sekarang menggunakan CoMaps di layar mobil</string>
+    <string name="car_used_on_the_car_screen">Anda sekarang menggunakan Maps di layar mobil</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">Anda terhubung ke Android Auto</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -712,11 +712,11 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">Ke layar mobil</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">CoMaps membutuhkan akses lokasi. Jika sudah aman, periksa notifikasi di ponsel Anda.</string>
+    <string name="aa_location_permissions_request">Maps membutuhkan akses lokasi. Jika sudah aman, periksa notifikasi di ponsel Anda.</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">Aplikasi ini memerlukan izin Anda</string>
     <!-- The text in the activity for location permission request. -->
-    <string name="aa_request_permission_activity_text">CoMaps di Android Auto memerlukan izin lokasi agar dapat bekerja secara efektif</string>
+    <string name="aa_request_permission_activity_text">Maps di Android Auto memerlukan izin lokasi agar dapat bekerja secara efektif</string>
     <!-- Grant Permissions button. -->
     <string name="aa_grant_permissions">Berikan Izin</string>
     <!-- Outdoors/hiking map style (activity) name in the Styles and Layers dialog -->
@@ -785,7 +785,7 @@
     <string name="read_in_wikipedia">Wikipedia</string>
     <string name="opens_in">Buka dalam %s</string>
     <string name="closes_in">Tutup dalam %s</string>
-    <string name="share_bookmarks_email_body">Halo! \n \nTerlampir adalah Favorit saya; silakan buka di CoMaps. Jika Anda belum memasangnya, Anda dapat mengunduhnya di sini: https://www.comaps.app/download/ \n \nSelamat melakukan perjalanan dengan CoMaps!</string>
+    <string name="share_bookmarks_email_body">Halo! \n \nTerlampir adalah Favorit saya; silakan buka di CoMaps. Jika Anda belum memasangnya, Anda dapat mengunduhnya di sini: https://www.comaps.app/download/ \n \nSelamat melakukan perjalanan dengan Maps!</string>
     <string name="bookmark_share_email_subject">Ikuti tautan ini %1$s atau tempel koordinat ini %2$s ke aplikasi peta Anda untuk melihat lokasi ini.</string>
     <string name="my_position_share_email">Ikuti tautan ini %1$s atau tempel koordinat ini %2$s ke aplikasi peta Anda untuk melihat lokasi saya.</string>
     <string name="wikimedia_commons">Wikimedia Commons</string>
@@ -917,5 +917,5 @@
     <string name="not_following_route">Tidak mengikuti rute</string>
     <string name="route_recalculating">Menghitung ulang rute…</string>
     <string name="pref_openexternallinks_title">Buka tautan pihak ketiga secara otomatis</string>
-    <string name="pref_openexternallinks_summary">Buka tautan pihak ketiga di CoMaps secara default</string>
+    <string name="pref_openexternallinks_summary">Buka tautan pihak ketiga di Maps secara default</string>
 </resources>

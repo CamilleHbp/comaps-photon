@@ -166,6 +166,7 @@
         </LinearLayout>
       </HorizontalScrollView>
   </FrameLayout>
+  <include android:id="@+id/routing_action_frame" layout="@layout/routing_action_panel" />
   <FrameLayout
     style="@style/MwmWidget.FrameLayout.Elevation"
     android:layout_width="match_parent"

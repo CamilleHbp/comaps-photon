@@ -10,6 +10,7 @@
 #include "app/organicmaps/sdk/routing/RouteRecommendationType.hpp"
 #include "app/organicmaps/sdk/routing/RouteStepInfo.hpp"
 #include "app/organicmaps/sdk/routing/RoutingInfo.hpp"
+#include "app/organicmaps/sdk/routing/OnlineRouting.hpp"
 #include "app/organicmaps/sdk/routing/TransitRouteInfo.hpp"
 #include "app/organicmaps/sdk/util/Distance.hpp"
 #include "app/organicmaps/sdk/util/FeatureIdBuilder.hpp"
@@ -1303,6 +1304,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeCloseRouting(JNI
 
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeBuildRoute(JNIEnv * env, jclass)
 {
+  InstallOnlineCarTransport(env);
   frm()->GetRoutingManager().BuildRoute();
 }
 
@@ -1358,6 +1360,32 @@ JNIEXPORT jobject JNICALL Java_app_organicmaps_sdk_Framework_nativeGetRouteFollo
     return nullptr;
 
   return CreateRoutingInfo(env, info, rm);
+}
+
+JNIEXPORT jdoubleArray JNICALL Java_app_organicmaps_sdk_Framework_nativeGetStopSearchPath(JNIEnv * env, jclass)
+{
+  std::vector<double> path;
+  frm()->GetRoutingManager().RoutingSession().RouteCall([&](routing::Route const & route)
+  {
+    if (!route.IsValid() || route.GetSubrouteCount() == 0)
+      return;
+    auto append = [&](ms::LatLon const & ll, size_t leg)
+    {
+      path.insert(path.end(), {ll.m_lat, ll.m_lon, static_cast<double>(leg)});
+    };
+    append(route.GetSubrouteAttrs(0).GetStart().ToLatLon(), 0);
+    auto const & segments = route.GetRouteSegments();
+    for (size_t leg = 0; leg < route.GetSubrouteCount(); ++leg)
+    {
+      auto const & attrs = route.GetSubrouteAttrs(leg);
+      for (size_t i = attrs.GetBeginSegmentIdx(); i < attrs.GetEndSegmentIdx(); ++i)
+        append(segments[i].GetJunction().ToLatLon(), leg);
+    }
+  });
+  auto array = env->NewDoubleArray(path.size());
+  if (array)
+    env->SetDoubleArrayRegion(array, 0, path.size(), path.data());
+  return array;
 }
 
 JNIEXPORT jobjectArray JNICALL Java_app_organicmaps_sdk_Framework_nativeGetRouteJunctionPoints(JNIEnv * env, jclass,
@@ -1547,6 +1575,11 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeAddRoutePoint(
   data.m_position = m2::PointD(mercator::FromLatLon(lat, lon));
 
   frm()->GetRoutingManager().AddRoutePoint(std::move(data), reorderIntermediatePoints);
+}
+
+JNIEXPORT jboolean JNICALL Java_app_organicmaps_sdk_Framework_nativeHasPositionForRouting(JNIEnv *, jclass)
+{
+  return frm()->GetBookmarkManager().MyPositionMark().HasPosition();
 }
 
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeRemoveRoutePoints(JNIEnv * env, jclass)

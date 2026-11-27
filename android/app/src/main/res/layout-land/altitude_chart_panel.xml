@@ -80,6 +80,15 @@
       app:iconTint="?android:textColorPrimary" />
 
     <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn__add_stop"
+      style="@style/Widget.Material3.Button.IconButton"
+      android:layout_width="@dimen/nav_icon_size"
+      android:layout_height="@dimen/nav_icon_size"
+      android:contentDescription="@string/placepage_add_stop"
+      app:icon="@drawable/ic_add_list"
+      app:iconTint="?android:textColorPrimary" />
+
+    <com.google.android.material.button.MaterialButton
       android:id="@+id/btn__directions_preview"
       style="@style/Widget.Material3.Button.IconButton"
       android:layout_width="@dimen/nav_icon_size"

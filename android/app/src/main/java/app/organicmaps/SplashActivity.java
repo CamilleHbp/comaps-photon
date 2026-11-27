@@ -1,8 +1,5 @@
 package app.organicmaps;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,9 +40,6 @@ public class SplashActivity extends AppCompatActivity
   @SuppressWarnings("NotNullFieldNotInitialized")
   @NonNull
   private ActivityResultLauncher<Intent> mApiRequest;
-  @SuppressWarnings("NotNullFieldNotInitialized")
-  @NonNull
-  private ActivityResultLauncher<String[]> mPermissionRequest;
   @NonNull
   private ActivityResultLauncher<SharingUtils.SharingIntent> mShareLauncher;
 
@@ -69,8 +63,6 @@ public class SplashActivity extends AppCompatActivity
         return insets;
       }
     });
-    mPermissionRequest = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
-                                                   result -> Config.setLocationRequested());
     mApiRequest = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
       setResult(result.getResultCode(), result.getData());
       finish();
@@ -90,13 +82,6 @@ public class SplashActivity extends AppCompatActivity
     super.onResume();
     if (mCanceled)
       return;
-    if (!Config.isLocationRequested() && !LocationUtils.checkLocationPermission(this))
-    {
-      Logger.d(TAG, "Requesting location permissions");
-      mPermissionRequest.launch(new String[] {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION});
-      return;
-    }
-
     UiThread.runLater(mInitCoreDelayedTask, DELAY);
   }
 
@@ -111,8 +96,6 @@ public class SplashActivity extends AppCompatActivity
   protected void onDestroy()
   {
     super.onDestroy();
-    mPermissionRequest.unregister();
-    mPermissionRequest = null;
     mApiRequest.unregister();
     mApiRequest = null;
   }

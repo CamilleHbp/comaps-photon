@@ -216,7 +216,7 @@ public class RoutingController
 
     if (mLastResultCode != ResultCodes.NEED_MORE_MAPS)
     {
-      setBuildState(BuildState.ERROR);
+      setBuildState(isNavigating() && Framework.nativeIsRouteBuilt() ? BuildState.BUILT : BuildState.ERROR);
       mLastBuildProgress = 0;
       updateProgress();
     }
@@ -229,6 +229,7 @@ public class RoutingController
 
   private boolean isDrivingOptionsBuildError()
   {
+    if (isVehicleRouterType() && OnlineRouting.nativeGetStatus()[2] != 0) return false;
     return mLastResultCode != ResultCodes.NEED_MORE_MAPS && !isRulerRouterType() && RoutingOptions.hasAnyOptions(mLastRouterType);
   }
 
@@ -397,6 +398,7 @@ public class RoutingController
 
   public void start()
   {
+    if (!OnlineRouting.nativeCanNavigate()) return;
     Logger.d(TAG, "start");
 
     // This saving is needed just for situation when the user starts navigation
@@ -414,6 +416,18 @@ public class RoutingController
   public void addStop(@NonNull MapObject mapObject)
   {
     addRoutePoint(RouteMarkType.Intermediate, mapObject);
+    rebuildWithAddedStop();
+  }
+
+  public void addStopOnLeg(String name, double lat, double lon, int leg)
+  {
+    if (!isPlanning() || !isBuilt() || !isStopPointAllowed()) return;
+    Framework.nativeAddRoutePoint(name, "", RouteMarkType.Intermediate, leg, false, lat, lon, false);
+    rebuildWithAddedStop();
+  }
+
+  private void rebuildWithAddedStop()
+  {
     build();
     if (mContainer != null)
       mContainer.onAddedStop();
@@ -901,12 +915,14 @@ public class RoutingController
     if (!isWaitingPoiPick())
       return;
 
-    if (mWaitingPoiPickType != RouteMarkType.Start && mWaitingPoiPickType != RouteMarkType.Finish)
-      throw new AssertionError("Only start and finish points can be added through search!");
 
     if (point != null)
     {
-      if (mWaitingPoiPickType == RouteMarkType.Finish)
+      if (mWaitingPoiPickType == RouteMarkType.Intermediate)
+      {
+        if (isStopPointAllowed()) addStop(point);
+      }
+      else if (mWaitingPoiPickType == RouteMarkType.Finish)
         setEndPoint(point);
       else
         setStartPoint(point);

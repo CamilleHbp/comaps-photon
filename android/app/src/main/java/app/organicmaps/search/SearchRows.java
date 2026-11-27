@@ -18,7 +18,8 @@ final class SearchRows
       for (int i = 0; i < online.length; ++i)
         if (online[i])
           mRows.add(i);
-      mRows.add(OFFLINE_HEADER);
+      if (mRows.size() - 1 < online.length)
+        mRows.add(OFFLINE_HEADER);
     }
     for (int i = 0; i < online.length; ++i)
       if (!grouped || !online[i])

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "routing/async_router.hpp"
+#include "routing/car_routing.hpp"
 #include "routing/checkpoints.hpp"
 #include "routing/position_accumulator.hpp"
 #include "routing/router.hpp"
@@ -121,6 +122,9 @@ public:
   /// Now indicates only that user pushed start button. Route follows by default.
   /// Returns true if following was enabled, false if a route is not ready for the following yet.
   bool EnableFollowMode();
+  bool CanFollowRoute() const;
+  CarRouteInfo GetCarRouteInfo() const;
+  void MarkRebuildFailed();
 
   void SetRoutingSettings(RoutingSettings const & routingSettings);
   void SetRoutingCallbacks(ReadyCallback const & buildReadyCallback, ReadyCallback const & rebuildReadyCallback,

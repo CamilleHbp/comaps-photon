@@ -31,7 +31,7 @@ java {
     }
 }
 
-val appName = "CoMaps"
+val appName = "Maps"
 val appId = "app.comaps"
 // These are properly set in the 'secure.properties.*' files but must be declared here for build sync to succeed.
 project.ext["secretTestStoreFile"] = "comaps-test.keystore"
@@ -86,6 +86,7 @@ android {
 
     defaultConfig {
         resValue("string", "camille_update_app_id", "comaps-photon")
+        resValue("string", "camille_update_prompt_activity", "app.organicmaps.MwmActivity")
         versionCode = rootProject.ext.get("versionCode") as Int
         versionName = rootProject.ext.get("versionName") as String
         applicationId = appId
@@ -194,7 +195,7 @@ android {
         getByName("debug") {
             storeFile = project.projectDir.resolve(File(comapsDebugKeystorePath))
             storePassword = "12345678"
-            keyAlias = "$appName Debug"
+            keyAlias = "CoMaps Debug"
             keyPassword = "12345678"
         }
         create("test") {
@@ -357,7 +358,7 @@ androidComponents {
 }
 
 dependencies {
-    implementation(files("libs/camille-updater-1.0.4.aar"))
+    implementation(files("libs/camille-updater-1.0.6.aar"))
     implementation(project(":sdk"))
     coreLibraryDesugaring(libs.android.tools.desugar)
 

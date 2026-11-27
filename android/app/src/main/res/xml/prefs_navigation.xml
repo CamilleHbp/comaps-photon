@@ -28,6 +28,19 @@
     android:widgetLayout="@layout/preference_switch"
     app:icon="@drawable/ic_three_d_rotation"
     app:singleLineTitle="false" />
+
+  <PreferenceCategory android:title="@string/online_route_settings_title">
+    <EditTextPreference android:key="valhalla_endpoint" android:persistent="false"
+        android:title="@string/online_route_endpoint" app:singleLineTitle="false" />
+    <SwitchPreferenceCompat android:key="valhalla_enabled" android:persistent="false"
+        android:title="@string/online_route_opt_in" android:summary="@string/online_route_privacy"
+        app:singleLineTitle="false" />
+    <SwitchPreferenceCompat android:key="valhalla_hard_exclusions" android:persistent="false"
+        android:title="@string/online_route_exclusions" android:summary="@string/online_route_exclusions_hint"
+        app:singleLineTitle="false" />
+    <Preference android:key="valhalla_retry" android:title="@string/online_route_retry"
+        android:summary="@string/online_route_retry_hint" app:singleLineTitle="false" />
+  </PreferenceCategory>
   <SwitchPreferenceCompat
     android:key="@string/pref_auto_zoom"
     android:title="@string/pref_map_auto_zoom"

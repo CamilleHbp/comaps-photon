@@ -1,0 +1,18 @@
+<resources>
+  <string-array name="route_stop_choices">
+    <item>Tous les types de lieux</item>
+    <item>Stations-service</item>
+    <item>Auberges de jeunesse</item>
+    <item>Restaurants</item>
+    <item>Cafés</item>
+    <item>Bornes de recharge</item>
+    <item>Toilettes</item>
+  </string-array>
+  <string name="route_stop_radius">Distance maximale du trajet : %1$d km</string>
+  <string name="route_stop_searching">Recherche sur le trajet…</string>
+  <string name="route_stop_empty">Aucun lieu correspondant dans ce rayon.</string>
+  <string name="route_stop_error">Recherche indisponible. Réessayez.</string>
+  <string name="route_stop_query">Rechercher par nom sur le trajet</string>
+  <string name="route_stop_location">Choisir un lieu</string>
+  <string name="route_stop_result">%1$s\nÀ %2$.1f km du trajet · à %3$.1f km du départ</string>
+</resources>

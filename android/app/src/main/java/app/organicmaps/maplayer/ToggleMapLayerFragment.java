@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
 import app.organicmaps.sdk.maplayer.Mode;
@@ -18,16 +16,12 @@ import app.organicmaps.sdk.util.SharedPropertiesUtils;
 import app.organicmaps.util.ThemeSwitcher;
 import app.organicmaps.util.Utils;
 import app.organicmaps.util.bottomsheet.MenuBottomSheetFragment;
-import app.organicmaps.widget.recycler.SpanningLinearLayoutManager;
-import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToggleMapLayerFragment extends Fragment
 {
   private static final String LAYERS_MENU_ID = "LAYERS_MENU_BOTTOM_SHEET";
-  @Nullable
-  private LayersAdapter mAdapter;
   private MapButtonsController mMapButtonsController;
 
   @Nullable
@@ -35,32 +29,12 @@ public class ToggleMapLayerFragment extends Fragment
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState)
   {
-    View mRoot = inflater.inflate(R.layout.fragment_toggle_map_layer, container, false);
-
     mMapButtonsController =
         (MapButtonsController) requireActivity().getSupportFragmentManager().findFragmentById(R.id.map_buttons);
-    MaterialButton mCloseButton = mRoot.findViewById(R.id.close_button);
-    mCloseButton.setOnClickListener(view -> closeLayerBottomSheet());
-
-    initRecycler(mRoot);
-    ((android.widget.LinearLayout) mRoot).addView(new SavedPlacesLayersView(requireContext(),
+    return new SavedPlacesLayersView(requireContext(), getLayersItems(),
         () -> { BookmarkCategoriesActivity.start(requireActivity()); closeLayerBottomSheet(); },
         this::closeLayerBottomSheet,
-        () -> { app.organicmaps.bookmarks.OsmAndImportActivity.start(requireActivity()); closeLayerBottomSheet(); }));
-    androidx.core.widget.NestedScrollView scroll = new androidx.core.widget.NestedScrollView(requireContext());
-    scroll.addView(mRoot);
-    return scroll;
-  }
-
-  private void initRecycler(@NonNull View root)
-  {
-    RecyclerView recycler = root.findViewById(R.id.recycler);
-    RecyclerView.LayoutManager layoutManager =
-        new SpanningLinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-    recycler.setLayoutManager(layoutManager);
-    mAdapter = new LayersAdapter(getLayersItems());
-    recycler.setAdapter(mAdapter);
-    recycler.setNestedScrollingEnabled(false);
+        () -> { app.organicmaps.bookmarks.OsmAndImportActivity.start(requireActivity()); closeLayerBottomSheet(); });
   }
 
   private List<LayerBottomSheetItem> getLayersItems()
@@ -83,7 +57,6 @@ public class ToggleMapLayerFragment extends Fragment
     // TODO: dirty hack :(
     if (mode == Mode.OUTDOORS)
       ThemeSwitcher.INSTANCE.restart(true);
-    mAdapter.notifyDataSetChanged();
     mMapButtonsController.updateLayerButton();
     if (MwmApplication.from(context).getIsolinesManager().shouldShowNotification())
       Utils.showSnackbar(context, v.getRootView(), R.string.isolines_toast_zooms_1_10);

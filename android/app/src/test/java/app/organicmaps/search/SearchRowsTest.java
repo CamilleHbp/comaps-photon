@@ -42,8 +42,7 @@ public class SearchRowsTest
   public void emptyOnlineSearchStillHasRoomForStatus()
   {
     SearchRows rows = new SearchRows(true, new boolean[0]);
-    assertEquals(2, rows.size());
+    assertEquals(1, rows.size());
     assertEquals(SearchRows.ONLINE_HEADER, rows.resultIndex(0));
-    assertEquals(SearchRows.OFFLINE_HEADER, rows.resultIndex(1));
   }
 }

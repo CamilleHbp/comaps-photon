@@ -53,7 +53,7 @@ public:
 
   void SetGuidesTracks(GuidesTracks && guides);
   /// Interrupt routing and clear buffers
-  void ClearState();
+  void ClearState(bool newJourney = false);
 
   bool FindClosestProjectionToRoad(m2::PointD const & point, m2::PointD const & direction, double radius,
                                    EdgeProj & proj);
@@ -109,6 +109,7 @@ private:
 
   /// Current request parameters
   bool m_clearState = false;
+  bool m_newJourney = false;
   Checkpoints m_checkpoints;
   GuidesTracks m_guides;
 

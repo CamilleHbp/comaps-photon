@@ -1,0 +1,11 @@
+<resources>
+  <string name="place_directions">Directions</string>
+  <string name="place_use_endpoint">Use this place</string>
+  <string name="planner_from">From</string>
+  <string name="planner_to">To</string>
+  <string name="planner_choose_start">Choose starting point</string>
+  <string name="planner_choose_finish">Choose destination</string>
+  <string name="planner_use_location">Use my location</string>
+  <string name="planner_swap">Swap start and destination</string>
+  <string name="planner_location_unavailable">Current location unavailable. Choose a starting point or try again.</string>
+</resources>

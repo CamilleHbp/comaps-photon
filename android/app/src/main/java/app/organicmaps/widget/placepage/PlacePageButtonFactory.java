@@ -39,14 +39,9 @@ public class PlacePageButtonFactory
         titleId = R.string.delete;
         yield R.drawable.ic_delete;
       }
-      case ROUTE_FROM ->
+      case DIRECTIONS, SELECT_ENDPOINT ->
       {
-        titleId = R.string.p2p_from_here;
-        yield R.drawable.ic_route_from;
-      }
-      case ROUTE_TO ->
-      {
-        titleId = R.string.p2p_to_here;
+        titleId = buttonType == PlacePageButtons.ButtonType.DIRECTIONS ? R.string.place_directions : R.string.place_use_endpoint;
         yield R.drawable.ic_route_to;
       }
       case ROUTE_ADD ->

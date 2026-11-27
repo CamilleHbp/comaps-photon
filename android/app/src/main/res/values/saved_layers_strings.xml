@@ -10,4 +10,10 @@
   <string name="saved_layers_zoom">Zoom to list</string>
   <plurals name="saved_layers_places"><item quantity="one">%d place</item><item quantity="other">%d places</item></plurals>
   <plurals name="saved_layers_tracks"><item quantity="one">%d track</item><item quantity="other">%d tracks</item></plurals>
+  <string name="saved_layers_panel_title">Layers</string>
+  <string name="saved_layers_options">Layer options</string>
+  <string name="saved_layers_visible">%1$d of %2$d visible</string>
+  <string name="saved_layers_clear_search">Clear search</string>
+  <string name="saved_layers_empty">Your saved lists will appear here. Add places in Favorites or import them using Layer options.</string>
+  <string name="saved_layers_no_results">No matching lists. Try another name or clear your search.</string>
 </resources>

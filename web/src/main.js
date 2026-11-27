@@ -45,6 +45,8 @@ function toast(message) { clearTimeout(toastTimer); $('toast').textContent = mes
 function connection() { document.body.classList.toggle('offline', !navigator.onLine); $('connection-text').textContent = t(navigator.onLine ? 'online' : 'offline'); $('offline-banner').hidden = navigator.onLine; }
 function translate() {
  document.documentElement.lang = lang;
+ document.title = t('appName');
+ document.querySelector('link[rel="manifest"]').href = lang === 'fr' ? '/manifest-fr.webmanifest' : '/manifest.webmanifest';
  document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
  document.querySelectorAll('[data-label]').forEach(el => {el.setAttribute('aria-label', t(el.dataset.label));el.title=t(el.dataset.label);});
  document.querySelectorAll('[data-placeholder]').forEach(el => el.placeholder = t(el.dataset.placeholder));

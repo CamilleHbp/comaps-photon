@@ -398,7 +398,7 @@ void Route::SetRouteSegments(vector<RouteSegment> && routeSegments)
     if (m_haveAltitudes && m_routeSegments[i].GetJunction().GetAltitude() == geometry::kInvalidAltitude)
       m_haveAltitudes = false;
 
-    if (!m_routeSegments[i].GetSegment().IsRealSegment())
+    if (m_routeSegments[i].IsArtificialConnector())
       fakeSegmentIndexes.push_back(i);
   }
 

@@ -1,0 +1,356 @@
+[
+  {
+    "id": "lansuscle-bordeaux",
+    "points": [
+      [
+        44.2166783,
+        3.752783
+      ],
+      [
+        44.841225,
+        -0.580036
+      ]
+    ],
+    "categories": [
+      "long-distance",
+      "rural",
+      "regional-boundaries"
+    ],
+    "evaluation_corridors": [
+      {
+        "name": "Rodez",
+        "lat": 44.3506,
+        "lon": 2.575
+      },
+      {
+        "name": "Cahors",
+        "lat": 44.4475,
+        "lon": 1.4418
+      },
+      {
+        "name": "Bergerac",
+        "lat": 44.8535,
+        "lon": 0.4837
+      }
+    ]
+  },
+  {
+    "id": "lansuscle-bordeaux-via-cahors",
+    "points": [
+      [
+        44.2166783,
+        3.752783
+      ],
+      [
+        44.4475,
+        1.4418
+      ],
+      [
+        44.841225,
+        -0.580036
+      ]
+    ],
+    "categories": [
+      "waypoint"
+    ]
+  },
+  {
+    "id": "rodez-bergerac",
+    "points": [
+      [
+        44.3506,
+        2.575
+      ],
+      [
+        44.8535,
+        0.4837
+      ]
+    ],
+    "categories": [
+      "rural",
+      "regional-boundaries"
+    ]
+  },
+  {
+    "id": "mende-ales",
+    "points": [
+      [
+        44.518,
+        3.501
+      ],
+      [
+        44.125,
+        4.084
+      ]
+    ],
+    "categories": [
+      "mountain"
+    ]
+  },
+  {
+    "id": "florac-millau",
+    "points": [
+      [
+        44.326,
+        3.594
+      ],
+      [
+        44.1,
+        3.078
+      ]
+    ],
+    "categories": [
+      "rural",
+      "mountain"
+    ]
+  },
+  {
+    "id": "montpellier-bordeaux",
+    "points": [
+      [
+        43.611,
+        3.877
+      ],
+      [
+        44.841225,
+        -0.580036
+      ]
+    ],
+    "categories": [
+      "long-distance",
+      "tolls"
+    ]
+  },
+  {
+    "id": "toulouse-bordeaux",
+    "points": [
+      [
+        43.604,
+        1.444
+      ],
+      [
+        44.841225,
+        -0.580036
+      ]
+    ],
+    "categories": [
+      "tolls"
+    ]
+  },
+  {
+    "id": "lyon-clermont",
+    "points": [
+      [
+        45.764,
+        4.835
+      ],
+      [
+        45.778,
+        3.087
+      ]
+    ],
+    "categories": [
+      "mountain",
+      "tolls"
+    ]
+  },
+  {
+    "id": "paris-lyon",
+    "points": [
+      [
+        48.857,
+        2.352
+      ],
+      [
+        45.764,
+        4.835
+      ]
+    ],
+    "categories": [
+      "long-distance",
+      "tolls"
+    ]
+  },
+  {
+    "id": "nantes-rennes",
+    "points": [
+      [
+        47.218,
+        -1.554
+      ],
+      [
+        48.111,
+        -1.68
+      ]
+    ],
+    "categories": [
+      "free-highway"
+    ]
+  },
+  {
+    "id": "brest-rennes",
+    "points": [
+      [
+        48.39,
+        -4.486
+      ],
+      [
+        48.111,
+        -1.68
+      ]
+    ],
+    "categories": [
+      "free-highway",
+      "regional-boundaries"
+    ]
+  },
+  {
+    "id": "nice-grenoble",
+    "points": [
+      [
+        43.71,
+        7.262
+      ],
+      [
+        45.188,
+        5.724
+      ]
+    ],
+    "categories": [
+      "mountain",
+      "long-distance"
+    ]
+  },
+  {
+    "id": "avignon-gap",
+    "points": [
+      [
+        43.949,
+        4.805
+      ],
+      [
+        44.559,
+        6.079
+      ]
+    ],
+    "categories": [
+      "rural",
+      "mountain"
+    ]
+  },
+  {
+    "id": "perpignan-barcelona",
+    "points": [
+      [
+        42.698,
+        2.895
+      ],
+      [
+        41.387,
+        2.17
+      ]
+    ],
+    "categories": [
+      "international"
+    ]
+  },
+  {
+    "id": "strasbourg-freiburg",
+    "points": [
+      [
+        48.573,
+        7.752
+      ],
+      [
+        47.999,
+        7.842
+      ]
+    ],
+    "categories": [
+      "international"
+    ]
+  },
+  {
+    "id": "lille-brussels",
+    "points": [
+      [
+        50.63,
+        3.057
+      ],
+      [
+        50.847,
+        4.352
+      ]
+    ],
+    "categories": [
+      "international"
+    ]
+  },
+  {
+    "id": "bordeaux-bayonne",
+    "points": [
+      [
+        44.841225,
+        -0.580036
+      ],
+      [
+        43.493,
+        -1.474
+      ]
+    ],
+    "categories": [
+      "tolls"
+    ]
+  },
+  {
+    "id": "cahors-toulouse",
+    "points": [
+      [
+        44.4475,
+        1.4418
+      ],
+      [
+        43.604,
+        1.444
+      ]
+    ],
+    "categories": [
+      "tolls",
+      "regional-boundaries"
+    ]
+  },
+  {
+    "id": "saint-etienne-valence",
+    "points": [
+      [
+        45.44,
+        4.387
+      ],
+      [
+        44.933,
+        4.892
+      ]
+    ],
+    "categories": [
+      "rural",
+      "tolls"
+    ]
+  },
+  {
+    "id": "toll-access-a75-millau",
+    "points": [
+      [
+        44.055,
+        3.03
+      ],
+      [
+        44.147,
+        3.007
+      ]
+    ],
+    "categories": [
+      "toll-access",
+      "endpoint-snapping"
+    ]
+  }
+]

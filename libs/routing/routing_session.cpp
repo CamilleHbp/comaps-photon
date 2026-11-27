@@ -81,7 +81,7 @@ void RoutingSession::BuildRoute(Checkpoints const & checkpoints, uint32_t timeou
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   CHECK(m_router, ());
   m_checkpoints = checkpoints;
-  m_router->ClearState();
+  m_router->ClearState(true /* new journey */);
 
   m_isFollowing = false;
   m_routingRebuildCount = -1;  // -1 for the first rebuild.
@@ -106,10 +106,27 @@ void RoutingSession::RebuildRoute(m2::PointD const & startPoint, ReadyCallback c
 
   Checkpoints checkpoints(m_checkpoints);
   checkpoints.SetPointFrom(startPoint);
+  auto onMissingMaps = needMoreMapsCallback;
+  auto onFailure = removeRouteCallback;
+  if (m_isFollowing && m_route->GetCarRouteInfo().managed)
+  {
+    onMissingMaps = [this, needMoreMapsCallback, readyCallback](uint64_t id, std::set<std::string> const & maps)
+    {
+      MarkRebuildFailed();
+      if (needMoreMapsCallback) needMoreMapsCallback(id, maps);
+      else readyCallback(*m_route, RouterResultCode::NeedMoreMaps);
+    };
+    onFailure = [this, removeRouteCallback, readyCallback](RouterResultCode code)
+    {
+      MarkRebuildFailed();
+      if (removeRouteCallback) removeRouteCallback(code);
+      else readyCallback(*m_route, code);
+    };
+  }
   // Use old-style callback construction, because lambda constructs buggy function on Android
   // (callback param isn't captured by value).
   m_router->CalculateRoute(checkpoints, direction, adjustToPrevRoute, DoReadyCallback(*this, readyCallback),
-                           needMoreMapsCallback, removeRouteCallback, m_progressCallback, timeoutSec);
+                           onMissingMaps, onFailure, m_progressCallback, timeoutSec);
 }
 
 m2::PointD RoutingSession::GetStartPoint() const
@@ -148,6 +165,7 @@ void RoutingSession::RemoveRoute()
 void RoutingSession::RebuildRouteOnTrafficUpdate()
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (!m_route->GetCarRouteInfo().CanNavigate()) return;
   m2::PointD startPoint;
 
   {
@@ -268,6 +286,8 @@ void RoutingSession::SetState(SessionState state)
 SessionState RoutingSession::OnLocationPositionChanged(GpsInfo const & info)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
+  // A preview must not become navigation or upload GPS-triggered reroutes.
+  if (!m_route->GetCarRouteInfo().CanNavigate()) return m_state;
   ASSERT_NOT_EQUAL(m_state, SessionState::NoValidRoute, ());
   ASSERT(m_router, ());
 
@@ -618,6 +638,7 @@ void RoutingSession::GenerateNotifications(std::vector<std::string> & notificati
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   notifications.clear();
+  if (!m_route->GetCarRouteInfo().CanNavigate()) return;
 
   ASSERT(m_route, ());
 
@@ -700,7 +721,7 @@ void RoutingSession::AssignRoute(std::shared_ptr<Route> const & route, RouterRes
     // Route building was not success. If the former route is valid let's continue moving along it.
     // If not, let's set corresponding state.
     if (m_route->IsValid())
-      SetState(SessionState::OnRoute);
+      SetState(m_isFollowing && m_route->GetCarRouteInfo().managed ? SessionState::OffRoute : SessionState::OnRoute);
     else
       SetState(SessionState::NoValidRoute);
     return;
@@ -812,6 +833,7 @@ bool RoutingSession::DisableFollowMode()
 bool RoutingSession::EnableFollowMode()
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (!CanFollowRoute()) return false;
   LOG(LINFO, ("Routing enables a following mode. SessionState: ", m_state));
   if (m_state == SessionState::RouteNotStarted || m_state == SessionState::OnRoute)
   {
@@ -823,6 +845,22 @@ bool RoutingSession::EnableFollowMode()
     m_isFollowing = true;
   }
   return m_isFollowing;
+}
+
+bool RoutingSession::CanFollowRoute() const
+{
+  return m_route->IsValid() && m_route->GetCarRouteInfo().CanNavigate();
+}
+
+CarRouteInfo RoutingSession::GetCarRouteInfo() const
+{
+  return m_route->GetCarRouteInfo();
+}
+
+void RoutingSession::MarkRebuildFailed()
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (m_isFollowing && m_route->IsValid()) SetState(SessionState::OffRoute);
 }
 
 void RoutingSession::SetRoutingSettings(RoutingSettings const & routingSettings)

@@ -9,6 +9,7 @@
 #include "routing/regions_decl.hpp"
 #include "routing/road_graph.hpp"
 #include "routing/router.hpp"
+#include "routing/routing_options.hpp"
 #include "routing/routing_callbacks.hpp"
 #include "routing/segment.hpp"
 #include "routing/segmented_route.hpp"
@@ -77,6 +78,7 @@ public:
   // IRouter overrides:
   std::string GetName() const override { return m_name; }
   void ClearState() override;
+  void SetOptionsForRequest(RoutingOptions const & options) override { m_requestOptions = options; }
 
   void SetGuides(GuidesTracks && guides) override;
   RouterResultCode CalculateRoute(Checkpoints const & checkpoints, m2::PointD const & startDirection,
@@ -88,6 +90,9 @@ public:
   bool GetBestOutgoingEdges(m2::PointD const & checkpoint, WorldGraph & graph, std::vector<Edge> & edges);
 
   VehicleType GetVehicleType() const { return m_vehicleType; }
+
+  // Diagnostic comparison only; normal routing always retains its default.
+  void SetUseLeapsForTesting(bool enabled) { m_useLeaps = enabled; }
 
   template <class T>
   void SetCurrentTimeGetter(T && getter)
@@ -266,6 +271,8 @@ private:
   std::vector<Segment> GetBestOutgoingSegments(m2::PointD const & checkpoint, WorldGraph & graph);
 
   VehicleType m_vehicleType;
+  bool m_useLeaps = true;
+  std::optional<RoutingOptions> m_requestOptions;
   bool m_loadAltitudes;
   std::string const m_name;
   MwmDataSource m_dataSource;

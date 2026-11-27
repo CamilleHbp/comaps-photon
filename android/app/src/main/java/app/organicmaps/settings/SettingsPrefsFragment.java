@@ -40,6 +40,11 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment
   public boolean onPreferenceTreeClick(Preference preference)
   {
     final String key = preference.getKey();
+    if ("check_app_updates".equals(key))
+    {
+      studio.camille.updater.CamilleUpdater.checkNow(requireActivity());
+      return true;
+    }
     if (key != null && key.equals(getString(R.string.pref_osm_profile)))
     {
       startActivity(new Intent(requireActivity(), ProfileActivity.class));

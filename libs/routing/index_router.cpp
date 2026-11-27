@@ -1089,7 +1089,7 @@ RouterResultCode IndexRouter::AdjustRoute(Checkpoints const & checkpoints, m2::P
 unique_ptr<WorldGraph> IndexRouter::MakeWorldGraph()
 {
   // Use saved routing options for all types (car, bicycle, pedestrian).
-  RoutingOptions const routingOptions = RoutingOptions::LoadOptionsFromSettings(m_vehicleType);
+  RoutingOptions const routingOptions = m_requestOptions ? *m_requestOptions : RoutingOptions::LoadOptionsFromSettings(m_vehicleType);
   /// @DebugNote
   // Add avoid roads here for debug purpose.
   // routingOptions.Add(RoutingOptions::Option::Motorway);
@@ -1827,7 +1827,7 @@ void IndexRouter::SetupAlgorithmMode(IndexGraphStarter & starter, bool guidesAct
   case VehicleType::Transit: starter.GetGraph().SetMode(WorldGraphMode::NoLeaps); break;
   case VehicleType::Car:
   case VehicleType::Decoder:
-    starter.GetGraph().SetMode(AreMwmsNear(starter) ? WorldGraphMode::Joints : WorldGraphMode::LeapsOnly);
+    starter.GetGraph().SetMode(!m_useLeaps || AreMwmsNear(starter) ? WorldGraphMode::Joints : WorldGraphMode::LeapsOnly);
     break;
   case VehicleType::Count: CHECK(false, ("Unknown vehicle type:", m_vehicleType)); break;
   }

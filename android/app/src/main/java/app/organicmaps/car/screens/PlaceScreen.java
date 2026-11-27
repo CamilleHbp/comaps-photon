@@ -164,6 +164,8 @@ public class PlaceScreen extends BaseMapScreen implements OnBackPressedCallback.
     builder.addRow(getPlaceDescription());
     if (routingInfo != null)
       builder.addRow(getPlaceRouteInfo(routingInfo));
+    if (routingInfo != null && mRoutingController.isVehicleRouterType())
+      builder.addRow(new Row.Builder().setTitle(app.organicmaps.sdk.routing.OnlineRouting.statusText(getCarContext())).build());
 
     final Row placeOpeningHours =
         UiHelpers.getPlaceOpeningHoursRow(Objects.requireNonNull(mMapObject), getCarContext());
@@ -227,7 +229,7 @@ public class PlaceScreen extends BaseMapScreen implements OnBackPressedCallback.
     }
 
     // Don't show `Start` button when build error.
-    if (mIsBuildError)
+    if (mIsBuildError || !app.organicmaps.sdk.routing.OnlineRouting.nativeCanNavigate())
       return;
 
     final Action.Builder startRouteBuilder = new Action.Builder();

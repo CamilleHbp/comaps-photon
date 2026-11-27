@@ -120,6 +120,9 @@ RoutesBuilder::RoutesBuilder(size_t threadsNumber) : m_threadPool(threadsNumber)
   for (auto const & localFile : localFiles)
   {
     auto const & countryFile = localFile.GetCountryFile();
+    // World overview maps are leaves in the catalogue, but have no car graph.
+    if (countryFile.GetName() == "World" || countryFile.GetName() == "WorldCoasts")
+      continue;
     // Only maps from countries.txt should be used.
     if (!m_cpg->GetStorageForTesting().IsLeaf(countryFile.GetName()))
       continue;
@@ -293,6 +296,7 @@ void RoutesBuilder::Processor::InitRouter(VehicleType type)
 RoutesBuilder::Result RoutesBuilder::Processor::operator()(Params const & params)
 {
   InitRouter(params.m_type);
+  m_router->SetUseLeapsForTesting(!params.m_disableLeaps);
   SCOPE_GUARD(returnDataSource, [&]() { m_dataSourceStorage.PushDataSource(std::move(m_dataSource)); });
 
   LOG(LINFO, ("Start building route, checkpoints:", params.m_checkpoints));
@@ -324,6 +328,8 @@ RoutesBuilder::Result RoutesBuilder::Processor::operator()(Params const & params
   RoutesBuilder::Route routeResult;
   routeResult.m_distance = route.GetTotalDistanceMeters();
   routeResult.m_eta = route.GetTotalTimeSec();
+  for (auto const & segment : route.GetRouteSegments())
+    routeResult.m_hasToll |= segment.GetRoadTypes().Has(RoutingOptions::Toll);
 
   routeResult.m_followedPolyline = route.GetFollowedPolyline();
 

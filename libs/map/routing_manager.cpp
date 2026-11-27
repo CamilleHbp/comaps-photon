@@ -12,6 +12,7 @@
 #include "routing/checkpoints.hpp"
 #include "routing/following_info.hpp"
 #include "routing/index_router.hpp"
+#include "routing/car_router.hpp"
 #include "routing/route.hpp"
 #include "routing/routing_callbacks.hpp"
 #include "routing/routing_settings.hpp"
@@ -284,7 +285,7 @@ drape_ptr<df::Subroute> CreateDrapeSubroute(vector<RouteSegment> const & segment
   auto lastReal = kInvalidId;
   for (size_t i = 0; i < segments.size(); ++i)
   {
-    if (!segments[i].GetSegment().IsRealSegment())
+    if (segments[i].IsArtificialConnector())
       continue;
 
     if (firstReal == kInvalidId)
@@ -449,7 +450,14 @@ void RoutingManager::OnRebuildRouteReady(Route const & route, RouterResultCode c
   HidePreviewSegments();
 
   if (code != RouterResultCode::NoError)
+  {
+    if (route.GetCarRouteInfo().managed)
+    {
+      if (code == RouterResultCode::NeedMoreMaps) m_carRoutingState->failure = CarRoutingFailure::MissingMaps;
+      CallRouteBuilded(code, storage::CountriesSet());
+    }
     return;
+  }
 
   auto const hasWarnings = InsertRoute(route);
   CallRouteBuilded(hasWarnings ? RouterResultCode::HasWarnings : code, storage::CountriesSet());
@@ -457,6 +465,14 @@ void RoutingManager::OnRebuildRouteReady(Route const & route, RouterResultCode c
 
 void RoutingManager::OnNeedMoreMaps(uint64_t routeId, storage::CountriesSet const & absentCountries)
 {
+  if (m_routingSession.IsFollowing() && m_routingSession.GetCarRouteInfo().managed)
+  {
+    m_carRoutingState->failure = CarRoutingFailure::MissingMaps;
+    m_routingSession.MarkRebuildFailed();
+    HidePreviewSegments();
+    CallRouteBuilded(RouterResultCode::NeedMoreMaps, absentCountries);
+    return;
+  }
   // No need to inform user about maps needed for the route if the method is called
   // when RoutingSession contains a new route.
   if (m_routingSession.IsRouteValid() && !m_routingSession.IsRouteId(routeId))
@@ -469,6 +485,12 @@ void RoutingManager::OnNeedMoreMaps(uint64_t routeId, storage::CountriesSet cons
 void RoutingManager::OnRemoveRoute(routing::RouterResultCode code)
 {
   HidePreviewSegments();
+  if (m_routingSession.IsFollowing() && m_routingSession.GetCarRouteInfo().managed)
+  {
+    m_routingSession.MarkRebuildFailed();
+    CallRouteBuilded(code, storage::CountriesSet());
+    return;
+  }
   RemoveRoute(true /* deactivateFollowing */);
   CallRouteBuilded(code, storage::CountriesSet());
 }
@@ -557,8 +579,49 @@ void RoutingManager::SetRouterImpl(RouterType type)
         numMwmIds, MakeNumMwmTree(*numMwmIds, m_callbacks.m_countryInfoGetter()), m_routingSession, dataSource);
 
   m_routingSession.SetRoutingSettings(GetRoutingSettings(vehicleType));
+  if (type == RouterType::Vehicle && m_carTransport)
+  {
+    m_carRoutingState = std::make_shared<CarRoutingState>();
+    router = make_unique<CarRouter>(GetCarRoutingConfig(), std::move(router), m_carTransport, m_carRoutingState,
+                                    [] { return RoutingOptions::LoadOptionsFromSettings(VehicleType::Car); });
+  }
   m_routingSession.SetRouter(std::move(router), std::move(regionsFinder));
   m_currentRouterType = type;
+}
+
+routing::CarRoutingConfig RoutingManager::GetCarRoutingConfig()
+{
+  CarRoutingConfig config;
+  settings::Get("CarRoutingOnline", config.online);
+  settings::Get("ValhallaEndpoint", config.endpoint);
+  settings::Get("ValhallaHardExclusions", config.hardExclusions);
+  if (config.endpoint.empty()) config.endpoint = kDefaultValhallaEndpoint;
+  return config;
+}
+
+bool RoutingManager::SetCarRoutingConfig(routing::CarRoutingConfig const & config)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (m_routingSession.IsFollowing()) return false;
+  auto const endpoint = config.endpoint.empty() ? std::string{} : NormalizeValhallaEndpoint(config.endpoint);
+  if ((!config.endpoint.empty() && endpoint.empty()) || (config.online && endpoint.empty())) return false;
+  settings::Set("CarRoutingOnline", config.online);
+  settings::Set("ValhallaEndpoint", endpoint);
+  settings::Set("ValhallaHardExclusions", config.hardExclusions);
+  if (m_currentRouterType == RouterType::Vehicle)
+  {
+    RemoveRoute(true);
+    SetRouterImpl(RouterType::Vehicle); // Cancels requests using the previous immutable configuration.
+  }
+  return true;
+}
+
+void RoutingManager::SetCarRoutingTransport(routing::OnlineTransport transport)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (m_carTransport) return;
+  m_carTransport = std::move(transport);
+  if (m_currentRouterType == RouterType::Vehicle) SetRouterImpl(RouterType::Vehicle);
 }
 
 void RoutingManager::RemoveRoute(bool deactivateFollowing)
@@ -608,6 +671,10 @@ void RoutingManager::CollectFeaturesAlongRoute(vector<RouteSegment> const & segm
 {
   ASSERT(!segments.empty(), ());
   ASSERT_NOT_EQUAL(featureType, Classificator::INVALID_TYPE, ());
+
+  // External geometry carries no native road direction or feature association.
+  if (std::any_of(segments.begin(), segments.end(), [](auto const & s) { return s.IsExternalRoad(); }))
+    return;
 
   double constexpr kSearchRadiusM = 0.3;  // radius (in meters)
   double const kSearchRadiusMercator = mercator::MetersToMercator(kSearchRadiusM);
@@ -717,8 +784,9 @@ void RoutingManager::CollectRoadWarnings(vector<routing::RouteSegment> const & s
       if (isWarnedType(currentType))
       {
         startDistance = currentDistance;
-        auto const featureId =
-            FeatureID(getMwmIdFn(segments[i].GetSegment().GetMwmId()), segments[i].GetSegment().GetFeatureId());
+        auto const featureId = segments[i].HasNativeFeature()
+            ? FeatureID(getMwmIdFn(segments[i].GetSegment().GetMwmId()), segments[i].GetSegment().GetFeatureId())
+            : FeatureID();
         auto const markPoint = i == 0 ? startPt : segments[i - 1].GetJunction().GetPoint();
         roadWarnings[currentType].push_back(RoadInfo(markPoint, featureId));
       }

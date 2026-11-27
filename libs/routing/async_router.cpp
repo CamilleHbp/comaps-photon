@@ -185,11 +185,12 @@ void AsyncRouter::SetGuidesTracks(GuidesTracks && guides)
   m_guides = std::move(guides);
 }
 
-void AsyncRouter::ClearState()
+void AsyncRouter::ClearState(bool newJourney)
 {
   unique_lock ul(m_guard);
 
   m_clearState = true;
+  m_newJourney = m_newJourney || newJourney;
   m_threadCondVar.notify_one();
 
   ResetDelegate();
@@ -248,6 +249,8 @@ void AsyncRouter::ThreadFunc()
 
       if (m_clearState && m_router)
       {
+        if (m_newJourney) m_router->StartNewJourney();
+        m_newJourney = false;
         m_router->ClearState();
         m_clearState = false;
       }
@@ -309,7 +312,7 @@ void AsyncRouter::CalculateRoute()
     LOG(LINFO, ("Calculating the route of direct length", checkpoints.GetSummaryLengthBetweenPointsMeters(),
                 "m. checkpoints:", checkpoints, "startDirection:", startDirection, "router name:", router->GetName()));
 
-    if (absentRegionsFinder)
+    if (absentRegionsFinder && router->UsesLocalMaps())
       absentRegionsFinder->GenerateAbsentRegions(checkpoints, delegateProxy->GetDelegate());
 
     // Run basic request.
@@ -339,13 +342,18 @@ void AsyncRouter::CalculateRoute()
                           [delegateProxy, route, code]() { delegateProxy->OnReady(route, code); });
   }
 
-  bool const needAbsentRegions = (code != RouterResultCode::Cancelled && route->GetRouterId() != "ruler-router");
+  bool const needAbsentRegions = code != RouterResultCode::Cancelled && route->GetRouterId() != "ruler-router" &&
+                                route->GetCarRouteInfo().backend != CarBackend::Valhalla;
 
   std::set<std::string> absent;
   if (needAbsentRegions)
   {
     if (absentRegionsFinder)
+    {
+      if (!router->UsesLocalMaps())
+        absentRegionsFinder->GenerateAbsentRegions(checkpoints, delegateProxy->GetDelegate());
       absentRegionsFinder->GetAbsentRegions(absent);
+    }
 
     absent.insert(route->GetAbsentCountries().cbegin(), route->GetAbsentCountries().cend());
     if (!absent.empty())

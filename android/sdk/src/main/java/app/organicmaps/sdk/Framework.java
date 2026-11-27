@@ -218,8 +218,12 @@ public class Framework
   @Nullable
   public static native RoutingInfo nativeGetRouteFollowingInfo();
 
+  /** Triples of latitude, longitude and incoming leg index, in driving order. */
   @Nullable
+  public static native double[] nativeGetStopSearchPath();
+
   /// @param[in] maxDistM Max distance between points in meters.
+  @Nullable
   public static native JunctionInfo[] nativeGetRouteJunctionPoints(double maxDistM);
 
   @Nullable
@@ -261,6 +265,8 @@ public class Framework
   public static native void nativeAddRoutePoint(String title, String subtitle, @NonNull RouteMarkType markType,
                                                 int intermediateIndex, boolean isMyPosition, double lat, double lon,
                                                 boolean reorderIntermediatePoints);
+
+  public static native boolean nativeHasPositionForRouting();
 
   public static native void nativeRemoveRoutePoints();
 

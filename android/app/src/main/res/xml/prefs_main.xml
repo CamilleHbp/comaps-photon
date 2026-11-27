@@ -60,6 +60,11 @@
     android:summary="@string/prefs_group_advanced_summary" />
 
   <Preference
+    android:key="check_app_updates"
+    android:title="@string/app_check_updates"
+    app:icon="@drawable/ic_update" />
+
+  <Preference
     android:key="@string/pref_about"
     android:title="@string/about_menu_title"
     app:icon="@drawable/ic_logo_monochrome_settings"

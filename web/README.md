@@ -1,6 +1,6 @@
-# CoMaps-Photon web
+# Maps web
 
-An installable web companion to the native CoMaps fork. Provides an OpenStreetMap map, explicit-submit Photon searches, local saved places, shareable coordinates, geolocation, multi-stop driving routes with toll and motorway avoidance, searches for places along a route, and CoMaps deep links. English and French follow browser preferences, with a persistent language override in Settings.
+An installable web companion to the native Maps app. Provides an OpenStreetMap map, explicit-submit Photon searches, local saved places, shareable coordinates, geolocation, multi-stop driving routes with toll and motorway avoidance, searches for places along a route, and CoMaps deep links. English and French follow browser preferences, with a persistent language override in Settings.
 
 Saved places and the app shell work offline. This is not a WebAssembly port of the native CoMaps engine: offline map downloads, offline search, and turn-by-turn navigation remain native-app features. Saved places are local to each origin and are not shared between domains.
 
@@ -19,7 +19,7 @@ Production output is `dist/`. The build generates a content-versioned service wo
 
 ## Hosting
 
-Serve `dist/` over HTTPS at both `maps.camille.studio` and `comaps.camille.studio`. Both names need an A record for the homeserver (`195.15.214.30`). The supplied `deploy/compose.yaml` runs a static, unprivileged Nginx container on the existing `homeserver-web` network. Place its `dist/`, `nginx.conf`, and compose file together under `/srv/homeserver/apps/comaps-photon-web/`. Append `deploy/Caddyfile` to the homeserver's Caddy configuration, validate it, and restart only the Caddy proxy with `docker compose restart caddy` (its admin API is disabled and this binary does not implement SIGUSR1 reloads).
+Serve `dist/` over HTTPS at `maps.camille.studio`. During the address change, existing installs can also open `comaps.camille.studio` to transfer their saved places. Active names need an A record for the homeserver (`195.15.214.30`). The supplied `deploy/compose.yaml` runs a static, unprivileged Nginx container on the existing `homeserver-web` network. Place its `dist/`, `nginx.conf`, and compose file together under `/srv/homeserver/apps/comaps-photon-web/`. Append `deploy/Caddyfile` to the homeserver's Caddy configuration, validate it, and restart only the Caddy proxy with `docker compose restart caddy` (its admin API is disabled and this binary does not implement SIGUSR1 reloads).
 
 Do not replace the homeserver Caddyfile or restart unrelated application services. Serve HTML, the manifest, and `sw.js` with revalidation; hashed assets may be immutable. Unknown asset paths must return 404.
 
@@ -31,5 +31,7 @@ Do not replace the homeserver Caddyfile or restart unrelated application service
 - Mapping library: [Leaflet](https://leafletjs.com/), BSD-2-Clause. Icons: [Lucide](https://lucide.dev/), ISC. The CoMaps mark is reused from this repository's `docs/badges/logo.svg`.
 
 The browser sends search text and map centre to Photon, and driving stops to Valhalla. Searching along a route sends the place name or type and bounding boxes covering the trip to Photon. The distance slider filters results from 1 to 100 km away from the route. Selecting a place inserts it on the nearest leg and recalculates the trip.
+
+Routing evaluation and native adapter tests: [Valhalla evaluation](../tools/routing/valhalla/README.md).
 
 The deployment CSP permits the explicitly requested `valhalla1.openstreetmap.de` demo host. It is selected by default and contacted only after consent. Add your own service origin to `connect-src` in `deploy/Caddyfile` before using it in production; keep this allowlist narrow. Route requests also require the service to allow the web origin through CORS.

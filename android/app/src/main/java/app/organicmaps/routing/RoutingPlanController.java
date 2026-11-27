@@ -191,6 +191,7 @@ public class RoutingPlanController extends ToolbarController
 
   private void updateProgressLabels()
   {
+    mRoutingBottomMenuController.showEndpoints();
     RoutingController.BuildState buildState = RoutingController.get().getBuildState();
 
     final boolean ready = (buildState == RoutingController.BuildState.BUILT);

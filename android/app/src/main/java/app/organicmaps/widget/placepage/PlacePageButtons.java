@@ -16,7 +16,7 @@ import app.organicmaps.R;
 import app.organicmaps.util.Graphics;
 import app.organicmaps.util.WindowInsetUtils.PaddingInsetsListener;
 import app.organicmaps.util.bottomsheet.MenuBottomSheetFragment;
-import app.organicmaps.sdk.routing.RoutingController;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import java.util.ArrayList;
@@ -100,8 +100,22 @@ public final class PlacePageButtons extends Fragment implements Observer<List<Pl
       return;
     List<PlacePageButton> shownButtons = collectButtons(buttons);
     mButtonsContainer.removeAllViews();
+    boolean primaryAvailable = true;
     for (PlacePageButton button : shownButtons)
-      mButtonsContainer.addView(createButton(button));
+    {
+      ButtonType type = button.getType();
+      if (primaryAvailable && (type == ButtonType.DIRECTIONS || type == ButtonType.SELECT_ENDPOINT || type == ButtonType.ROUTE_ADD))
+      {
+        MaterialButton action = (MaterialButton) getLayoutInflater().inflate(R.layout.place_route_action, mButtonsContainer, false);
+        action.setText(button.getTitle());
+        action.setIconResource(button.getIcon());
+        action.setOnClickListener(v -> mItemListener.onPlacePageButtonClick(type));
+        mButtonsContainer.addView(action);
+        primaryAvailable = false;
+      }
+      else
+        mButtonsContainer.addView(createButton(button));
+    }
   }
 
   private View createButton(@NonNull final PlacePageButton current)
@@ -118,8 +132,6 @@ public final class PlacePageButtons extends Fragment implements Observer<List<Pl
     final int tint;
     if (current.getType() == ButtonType.BOOKMARK_DELETE)
       tint = R.attr.iconTintActive;
-    else if (current.getType() == ButtonType.ROUTE_TO && RoutingController.get().getEndPoint() == null)
-      tint = com.google.android.material.R.attr.colorSecondary;
     else
       tint = R.attr.iconTint;
     icon.setImageDrawable(Graphics.tint(getContext(), current.getIcon(), tint));
@@ -144,8 +156,8 @@ public final class PlacePageButtons extends Fragment implements Observer<List<Pl
     BOOKMARK_SAVE,
     BOOKMARK_DELETE,
     TRACK_DELETE,
-    ROUTE_FROM,
-    ROUTE_TO,
+    DIRECTIONS,
+    SELECT_ENDPOINT,
     ROUTE_ADD,
     ROUTE_REMOVE,
     ROUTE_AVOID_TOLL,

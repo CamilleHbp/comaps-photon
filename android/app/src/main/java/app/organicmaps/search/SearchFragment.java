@@ -3,6 +3,7 @@ package app.organicmaps.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -170,6 +172,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
   private final LastPosition mLastPosition = new LastPosition();
   private boolean mSearchRunning;
   private boolean mUsePhoton;
+  private boolean mLandscapeKeyboardVisible;
   private boolean mResumeSearch;
   private String mInitialQuery;
   @Nullable
@@ -236,9 +239,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
     toolbar.setLayoutParams(lp);
 
     UiUtils.showIf(hasQuery, mResultsFrame);
-    UiUtils.showIf(hasQuery, mShowOnMapFab);
-    // Wait for the complete snapshot so late results cannot silently replace its pins.
-    mShowOnMapFab.setEnabled(!mUsePhoton || (!mSearchRunning && mSearchAdapter.getResultCount() > 0));
+    updateMapButton();
 
     if (hasQuery)
       mTabFrame.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
@@ -251,6 +252,22 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
       showDownloadSuggest();
     else
       hideDownloadSuggest();
+  }
+
+  @Override
+  public void onConfigurationChanged(@NonNull Configuration newConfig)
+  {
+    super.onConfigurationChanged(newConfig);
+    // The host handles rotation in place. Rebind the provider rows with the current layout.
+    if (getView() != null && mUsePhoton)
+      mSearchAdapter.notifyDataSetChanged();
+  }
+
+  private void updateMapButton()
+  {
+    // Photon pins use the completed result snapshot.
+    boolean ready = !mUsePhoton || (!mSearchRunning && mSearchAdapter.getResultCount() > 0);
+    UiUtils.showIf(mToolbarController.hasQuery() && ready && !mLandscapeKeyboardVisible, mShowOnMapFab);
   }
 
   private void updateResultsPlaceholder()
@@ -336,8 +353,13 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
 
     updateFrames();
     updateResultsPlaceholder();
-    ViewCompat.setOnApplyWindowInsetsListener(
-        mResults, new WindowInsetUtils.ScrollableContentInsetsListener(mResults, mShowOnMapFab));
+    var resultInsets = new WindowInsetUtils.ScrollableContentInsetsListener(mResults, mShowOnMapFab);
+    ViewCompat.setOnApplyWindowInsetsListener(mResults, (list, insets) -> {
+      mLandscapeKeyboardVisible = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                                  && insets.isVisible(WindowInsetsCompat.Type.ime());
+      updateMapButton();
+      return resultInsets.onApplyWindowInsets(list, insets);
+    });
 
     mToolbarController.activate();
 

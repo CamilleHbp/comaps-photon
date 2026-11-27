@@ -1,0 +1,11 @@
+<resources>
+  <string name="place_directions">Itinéraire</string>
+  <string name="place_use_endpoint">Utiliser ce lieu</string>
+  <string name="planner_from">Départ</string>
+  <string name="planner_to">Arrivée</string>
+  <string name="planner_choose_start">Choisir le départ</string>
+  <string name="planner_choose_finish">Choisir la destination</string>
+  <string name="planner_use_location">Utiliser ma position</string>
+  <string name="planner_swap">Inverser le départ et l’arrivée</string>
+  <string name="planner_location_unavailable">Position indisponible. Choisissez un point de départ ou réessayez.</string>
+</resources>

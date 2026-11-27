@@ -1,5 +1,7 @@
 #pragma once
 
+#include "routing/car_routing.hpp"
+
 #include "routing/lanes/lane_info.hpp"
 #include "routing/route_step.hpp"
 #include "routing/routing_options.hpp"
@@ -159,6 +161,11 @@ public:
   void SetTransitInfo(std::unique_ptr<TransitInfo> transitInfo) { m_transitInfo.Set(std::move(transitInfo)); }
 
   Segment const & GetSegment() const { return m_segment; }
+  // External road geometry is matchable but has no native MWM feature identity.
+  void SetExternalRoad() { m_externalRoad = true; }
+  bool IsExternalRoad() const { return m_externalRoad; }
+  bool HasNativeFeature() const { return !m_externalRoad && m_segment.IsRealSegment(); }
+  bool IsArtificialConnector() const { return !m_externalRoad && !m_segment.IsRealSegment(); }
   Segment & GetSegment() { return m_segment; }
   geometry::PointWithAltitude const & GetJunction() const { return m_junction; }
   RoadNameInfo const & GetRoadNameInfo() const { return m_roadNameInfo; }
@@ -186,6 +193,7 @@ public:
 
 private:
   Segment m_segment;
+  bool m_externalRoad = false;
 
   /// Turn (maneuver) information for the turn next to the |m_segment| if any.
   /// |m_turn::m_index| == segment index + 1.
@@ -359,6 +367,8 @@ public:
   FollowedPolyline const & GetFollowedPolyline() const { return m_poly; }
 
   std::string const & GetRouterId() const { return m_router; }
+  CarRouteInfo const & GetCarRouteInfo() const { return m_carRouteInfo; }
+  void SetCarRouteInfo(CarRouteInfo info) { m_carRouteInfo = info; }
   m2::PolylineD const & GetPoly() const { return m_poly.GetPolyline(); }
 
   size_t GetCurrentSubrouteIdx() const { return m_currentSubrouteIdx; }
@@ -457,6 +467,7 @@ public:
   traffic::SpeedGroup GetTraffic(size_t segmentIdx) const;
 
   void GetTurnsForTesting(std::vector<turns::TurnItem> & turns) const;
+  uint64_t GetRouteId() const { return m_routeId; }
   bool IsRouteId(uint64_t routeId) const { return routeId == m_routeId; }
 
   /// \returns Length of the route segment with |segIdx| in meters.
@@ -486,6 +497,7 @@ private:
   double GetCurrentTimeFromBeginSec() const;
 
   std::string m_router;
+  CarRouteInfo m_carRouteInfo;
   RoutingSettings m_routingSettings;
   std::string m_name;
 

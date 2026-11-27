@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="online_route_settings_title">Itinéraires voiture en ligne</string>
+  <string name="online_route_endpoint">Adresse du service Valhalla</string>
+  <string name="online_route_endpoint_hint">Adresse de service HTTPS. Laissez vide pour utiliser le service Valhalla public de FOSSGIS par défaut.</string>
+  <string name="online_route_endpoint_error">Saisissez une adresse HTTPS valide sans identifiants, paramètres ni fragment.</string>
+  <string name="online_route_opt_in">Utiliser les itinéraires en ligne Valhalla</string>
+  <string name="online_route_privacy">Activé par défaut. Envoie le départ, l’arrivée, les étapes et la direction initiale éventuelle à ce service lors du calcul d’itinéraires voiture. CoMaps assure la navigation et reste le recours hors ligne. Modifier ces réglages ferme l’itinéraire actuel.</string>
+  <string name="online_route_exclusions">Le service accepte les exclusions strictes</string>
+  <string name="online_route_exclusions_hint">Activez uniquement si le service prend en charge les exclusions strictes des péages, autoroutes et ferries. Les restrictions sont vérifiées dans tous les cas.</string>
+  <string name="online_route_retry">Réessayer Valhalla pour ce trajet</string>
+  <string name="online_route_retry_hint">Recalculer l’itinéraire actuel. Le recours hors ligne reste sélectionné lors des recalculs automatiques.</string>
+  <string name="online_route_preview">Valhalla · itinéraire en ligne</string>
+  <string name="online_route_comaps">CoMaps · itinéraire hors ligne</string>
+  <string name="online_route_navigation_locked">Navigation indisponible pour cet itinéraire</string>
+  <string name="online_route_fallback">Recours à CoMaps · %1$s</string>
+  <string name="online_route_reason_service">service en ligne indisponible</string>
+  <string name="online_route_reason_timeout">délai de la requête en ligne dépassé</string>
+  <string name="online_route_reason_busy">service en ligne occupé</string>
+  <string name="online_route_reason_invalid">itinéraire en ligne refusé</string>
+  <string name="online_route_reason_toll">péages signalés sur l’itinéraire en ligne</string>
+  <string name="online_route_reason_unknown">restrictions en ligne non vérifiables</string>
+  <string name="online_route_reason_warning">avertissement du service en ligne</string>
+  <string name="online_route_reason_options">les préférences de revêtement nécessitent CoMaps</string>
+  <string name="online_route_service_failed">Le service en ligne a échoué et CoMaps n’a pas pu calculer d’itinéraire de remplacement.</string>
+  <string name="online_route_missing_maps">CoMaps nécessite des cartes supplémentaires téléchargées pour calculer cet itinéraire.</string>
+  <string name="online_route_no_toll_free">Aucun itinéraire sans péage n’a été trouvé avec ces préférences.</string>
+  <string name="online_route_not_found">CoMaps n’a pas pu calculer d’itinéraire avec ces préférences.</string>
+  <string name="online_route_rebuild_failed">Le recalcul a échoué. L’itinéraire précédent reste affiché.</string>
+</resources>

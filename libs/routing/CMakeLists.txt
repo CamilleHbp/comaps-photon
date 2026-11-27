@@ -1,6 +1,15 @@
 project(routing)
 
 set(SRC
+  car_routing.hpp
+  car_router.cpp
+  car_router.hpp
+  valhalla_router.cpp
+  valhalla_router.hpp
+  valhalla_api.cpp
+  valhalla_api.hpp
+  valhalla_route.cpp
+  valhalla_route.hpp
   absent_regions_finder.cpp
   absent_regions_finder.hpp
   async_router.cpp

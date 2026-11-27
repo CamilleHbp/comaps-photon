@@ -138,7 +138,7 @@
     <string name="self_service">Samoposluživanje</string>
     <string name="panoramax">Panoramax slika</string>
     <string name="saved">Spremljeno</string>
-    <string name="disconnect_usb_cable">Isključite USB kabel ili umetnite memorijsku karticu za korištenje CoMaps</string>
+    <string name="disconnect_usb_cable">Isključite USB kabel ili umetnite memorijsku karticu za korištenje Maps</string>
     <string name="not_enough_free_space_on_sdcard">Prvo oslobodite prostor na SD kartici/USB memoriji kako biste mogli koristiti aplikaciju</string>
     <string name="download_resources">Prije nego što počnete koristiti aplikaciju, preuzmite općenitu kartu svijeta na svoj uređaj.\nZauzeti će %s prostora za pohranu.</string>
     <string name="downloading_country_can_proceed">Preuzimanje %1$s (%2$s). Sada možete\nnastaviti na kartu.</string>
@@ -172,8 +172,8 @@
     <string name="category_police">Policija</string>
     <string name="category_water">Voda</string>
     <string name="category_rv">Objekti za kampere</string>
-    <string name="share_bookmarks_email_subject">Moji CoMaps favoriti</string>
-    <string name="share_bookmarks_email_body">Pozdrav!\n\nU privitku su moji favoriti; molim vas otvorite ih u CoMaps aplikaciji. Ako je nemate instaliranu, možete je preuzeti ovdje: https://www.comaps.app/download/\n\nUživajte u putovanju s CoMapsom!</string>
+    <string name="share_bookmarks_email_subject">Moji Maps favoriti</string>
+    <string name="share_bookmarks_email_body">Pozdrav!\n\nU privitku su moji favoriti; molim vas otvorite ih u Maps aplikaciji. Ako je nemate instaliranu, možete je preuzeti ovdje: https://www.comaps.app/download/\n\nUživajte u putovanju s CoMapsom!</string>
     <string name="load_kmz_title">Učitavanje favorita</string>
     <string name="load_kmz_successful">Favoriti su uspješno učitani! Možete ih pronaći na karti ili na zaslonu Upravitelj favorita.</string>
     <string name="load_kmz_failed">Učitavanje favorita nije uspjelo. Datoteka je možda oštećena ili neispravna.</string>
@@ -183,7 +183,7 @@
     <string name="cant_change_this_setting">Žao nam je, postavke Pohrane karata trenutno su onemogućene</string>
     <string name="downloading_is_active">Preuzimanje karte je trenutno u tijeku</string>
     <string name="my_position_share_sms">Pogledajte moju trenutnu lokaciju u CoMapsu! %1$s ili %2$s Nemate offline karte? Preuzmite ih ovdje: https://www.comaps.app/download/</string>
-    <string name="my_position_share_email_subject">Hej, pogledaj moju trenutnu lokaciju na CoMaps karti!</string>
+    <string name="my_position_share_email_subject">Hej, pogledaj moju trenutnu lokaciju na Maps karti!</string>
     <string name="copied_to_clipboard">Kopirano u međuspremnik: %s</string>
     <string name="data_version">OpenStreetMap podaci: %s</string>
     <string name="tracks_title">Rute</string>
@@ -337,7 +337,7 @@
     <string name="editor_zip_code">Poštanski broj</string>
     <string name="error_enter_correct_zip_code">Unesite važeći poštanski broj</string>
     <string name="editor_other_info">Napomena za volontere OpenStreetMapa (nije obavezno)</string>
-    <string name="editor_note_hint">Opišite pogreške na karti ili stvari koje se ne mogu uređivati u CoMaps‑u</string>
+    <string name="editor_note_hint">Opišite pogreške na karti ili stvari koje se ne mogu uređivati u Maps‑u</string>
     <string name="editor_about_osm">Vaše se izmjene prenose u javnu bazu podataka <a href="https://wiki.openstreetmap.org/wiki/About_OpenStreetMap">OpenStreetMap</a>. Molimo vas da ne dodajete osobne podatke ili podatke zaštićene autorskim pravima.</string>
     <string name="editor_more_about_osm">Više o OpenStreetMapu</string>
     <string name="editor_osm_history">Vaša povijest uređivanja</string>
@@ -345,7 +345,7 @@
     <string name="editor_operator">Operator</string>
     <string name="operator">Operator: %s</string>
     <string name="editor_category_unsuitable_title">Ne možete pronaći odgovarajuću kategoriju?</string>
-    <string name="editor_category_unsuitable_text">**CoMaps** omogućuje dodavanje samo jednostavnih kategorija točaka, što znači da nije moguće dodavati gradove, ceste, jezera, tlocrte zgrada itd. Takve kategorije dodajte izravno na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Pogledajte naš <a href="https://www.comaps.app/support/advanced-map-editing/">vodič</a> za detaljne upute korak po korak.</string>
+    <string name="editor_category_unsuitable_text">**Maps** omogućuje dodavanje samo jednostavnih kategorija točaka, što znači da nije moguće dodavati gradove, ceste, jezera, tlocrte zgrada itd. Takve kategorije dodajte izravno na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Pogledajte naš <a href="https://www.comaps.app/support/advanced-map-editing/">vodič</a> za detaljne upute korak po korak.</string>
     <string name="downloader_no_downloaded_maps_title">Niste preuzeli nijednu kartu</string>
     <string name="downloader_no_downloaded_maps_message">Preuzmite karte za pretraživanje i navigaciju izvan mreže</string>
     <string name="current_location_unknown_error_title">Trenutna lokacija je nepoznata</string>
@@ -397,7 +397,7 @@
     <string name="mobile_data_option_never">Nikad ne koristite</string>
     <string name="traffic_update_maps_text">Za prikaz podataka o prometu, karte moraju biti ažurirane</string>
     <string name="increase_font_size">Povećaj veličinu oznaka na karti</string>
-    <string name="traffic_update_app">Molimo ažurirajte CoMaps</string>
+    <string name="traffic_update_app">Molimo ažurirajte Maps</string>
     <string name="traffic_data_unavailable">Podaci o prometu nisu dostupni</string>
     <string name="enable_logging">Omogući zapisivanje</string>
     <string name="feedback_general">Opće povratne informacije</string>
@@ -537,14 +537,14 @@
     <string name="app_tip_07">Našu aplikaciju razvili su nekoliko entuzijasta i zajednica.</string>
     <string name="app_tip_08">Podatke karte možete jednostavno popraviti i poboljšati.</string>
     <string name="app_tip_09">Naš glavni cilj je izrada brzih, na privatnost usmjerenih i jednostavnih karata koje ćete obožavati.</string>
-    <string name="car_used_on_the_phone_screen">Sada koristite CoMaps na zaslonu telefona</string>
-    <string name="car_used_on_the_car_screen">Sada koristite CoMaps na zaslonu automobila</string>
+    <string name="car_used_on_the_phone_screen">Sada koristite Maps na zaslonu telefona</string>
+    <string name="car_used_on_the_car_screen">Sada koristite Maps na zaslonu automobila</string>
     <string name="aa_connected_title">Povezani ste s Android Autom</string>
     <string name="car_continue_on_the_phone">Nastavite na telefonu</string>
     <string name="car_continue_in_the_car">Na ekran automobila</string>
-    <string name="aa_location_permissions_request">CoMaps treba pristup lokaciji. Kad bude sigurno, provjeri obavijest na svom telefonu.</string>
+    <string name="aa_location_permissions_request">Maps treba pristup lokaciji. Kad bude sigurno, provjeri obavijest na svom telefonu.</string>
     <string name="aa_request_permission_notification">Ova aplikacija treba vaše dopuštenje</string>
-    <string name="aa_request_permission_activity_text">CoMaps u Android Auto zahtijeva dopuštenja za lokaciju kako bi učinkovito funkcionirao</string>
+    <string name="aa_request_permission_activity_text">Maps u Android Auto zahtijeva dopuštenja za lokaciju kako bi učinkovito funkcionirao</string>
     <string name="aa_grant_permissions">Dodijeli dopuštenja</string>
     <string name="button_layer_outdoor">Na otvorenom</string>
     <string name="browser_not_available">Web preglednik nije dostupan</string>

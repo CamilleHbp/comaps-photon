@@ -63,7 +63,7 @@
     android:layout_gravity="center_vertical"
     android:layout_weight="0"
     android:background="?selectableItemBackgroundBorderless"
-    android:contentDescription="@null"
+    android:contentDescription="@string/search_by_voice"
     android:scaleType="center"
     app:srcCompat="@drawable/ic_mic_white"
     android:visibility="gone"

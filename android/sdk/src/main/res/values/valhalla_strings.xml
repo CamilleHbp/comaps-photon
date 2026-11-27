@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="online_route_settings_title">Online car routing</string>
+  <string name="online_route_endpoint">Valhalla service address</string>
+  <string name="online_route_endpoint_hint">HTTPS service address. Leave empty to use the default public FOSSGIS Valhalla service.</string>
+  <string name="online_route_endpoint_error">Enter a valid HTTPS address without credentials, query parameters or fragments.</string>
+  <string name="online_route_opt_in">Use Valhalla online routing</string>
+  <string name="online_route_privacy">Enabled by default. Sends the start, destination, stops and optional starting direction to this service when calculating car routes. CoMaps navigates the route and remains the offline fallback. Changing these settings closes the current route.</string>
+  <string name="online_route_exclusions">Service supports strict road exclusions</string>
+  <string name="online_route_exclusions_hint">Enable only if the service operator supports hard toll, motorway and ferry exclusions. Returned restrictions are checked in either case.</string>
+  <string name="online_route_retry">Retry Valhalla for this journey</string>
+  <string name="online_route_retry_hint">Recalculate the current route. Offline fallback stays selected during automatic rerouting.</string>
+  <string name="online_route_preview">Valhalla · online route</string>
+  <string name="online_route_comaps">CoMaps · offline routing</string>
+  <string name="online_route_navigation_locked">Navigation unavailable for this route</string>
+  <string name="online_route_fallback">CoMaps fallback · %1$s</string>
+  <string name="online_route_reason_service">online service unavailable</string>
+  <string name="online_route_reason_timeout">online request timed out</string>
+  <string name="online_route_reason_busy">online service busy</string>
+  <string name="online_route_reason_invalid">online route rejected</string>
+  <string name="online_route_reason_toll">online route reported tolls</string>
+  <string name="online_route_reason_unknown">online restrictions could not be verified</string>
+  <string name="online_route_reason_warning">online service reported a warning</string>
+  <string name="online_route_reason_options">surface preferences require CoMaps</string>
+  <string name="online_route_service_failed">The online service failed and CoMaps could not calculate a replacement route.</string>
+  <string name="online_route_missing_maps">CoMaps needs additional downloaded maps to calculate this route.</string>
+  <string name="online_route_no_toll_free">No toll-free route was found with these preferences.</string>
+  <string name="online_route_not_found">CoMaps could not calculate a route with these preferences.</string>
+  <string name="online_route_rebuild_failed">Recalculation failed. The previous route is still displayed.</string>
+</resources>

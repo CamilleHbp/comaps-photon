@@ -8,7 +8,7 @@
   <string name="osmand_import_not_osmand">Ce fichier ne contient pas de favoris OsmAnd. Utilisez l’importation habituelle des favoris pour les autres fichiers GPX, KML ou KMZ.</string>
   <string name="osmand_import_empty">Aucun lieu enregistré valide trouvé.</string>
   <string name="osmand_import_working">Préparation ou enregistrement des lieux…</string>
-  <string name="osmand_import_preview">Choisissez les listes à importer. Les lieux existants seront ignorés et vos modifications dans CoMaps conservées. Lieux invalides ignorés : %1$d.</string>
+  <string name="osmand_import_preview">Choisissez les listes à importer. Les lieux existants seront ignorés et vos modifications dans Cartes conservées. Lieux invalides ignorés : %1$d.</string>
   <string name="osmand_import_group">%1$s\n%2$d lieux · %3$d déjà inclus</string>
   <string name="osmand_import_selected">Importer les listes sélectionnées</string>
   <string name="osmand_import_result">%1$d lieux enregistrés. %2$d doublons ignorés. %3$d lieux invalides ignorés.</string>

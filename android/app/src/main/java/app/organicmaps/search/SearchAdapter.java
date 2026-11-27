@@ -1,6 +1,7 @@
 package app.organicmaps.search;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,20 +30,29 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
   private boolean mGrouped;
   private int mOnlineStatus = app.organicmaps.sdk.search.SearchEngine.PHOTON_LOADING;
   private static final int TYPE_HEADER = 3;
+  private static final int TYPE_LANDSCAPE_HEADER = 4;
 
   private class HeaderViewHolder extends SearchDataViewHolder
   {
+    private final MaterialTextView mTitle;
+    private final MaterialTextView mStatus;
+    private final MaterialTextView mDisclosure;
+
     HeaderViewHolder(View view)
     {
       super(view);
+      mTitle = view.findViewById(R.id.section_title);
+      mStatus = view.findViewById(R.id.section_status);
+      mDisclosure = view.findViewById(R.id.section_disclosure);
+      androidx.core.view.ViewCompat.setAccessibilityHeading(mTitle, true);
     }
 
     @Override
     void bind(SearchResult unused, int section)
     {
-      String text = mSearchFragment.getString(section == SearchRows.ONLINE_HEADER ? R.string.photon_online
-                                                                                  : R.string.photon_offline);
-      if (section == SearchRows.ONLINE_HEADER)
+      boolean online = section == SearchRows.ONLINE_HEADER;
+      mTitle.setText(online ? R.string.photon_online : R.string.photon_offline);
+      if (online)
       {
         int statusText = switch (mOnlineStatus)
         {
@@ -52,13 +62,13 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
           case app.organicmaps.sdk.search.SearchEngine.PHOTON_THROTTLED -> R.string.photon_throttled;
           default -> 0;
         };
-        if (statusText != 0)
-          text += "\n" + mSearchFragment.getString(statusText);
-        text += "\n"
-              + mSearchFragment.getString(R.string.photon_search_disclosure,
-                                          app.organicmaps.sdk.util.Config.getPhotonEndpoint());
+        UiUtils.setTextAndHideIfEmpty(mStatus, statusText == 0 ? null : mSearchFragment.getString(statusText));
+        mDisclosure.setText(mSearchFragment.getString(R.string.photon_search_disclosure,
+                                                      app.organicmaps.sdk.util.Config.getPhotonEndpoint()));
       }
-      ((MaterialTextView) itemView).setText(text);
+      else
+        mStatus.setVisibility(View.GONE);
+      UiUtils.showIf(online, mDisclosure);
     }
   }
 
@@ -274,7 +284,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
 
     return switch (viewType)
     {
-      case TYPE_HEADER -> new HeaderViewHolder(inflater.inflate(R.layout.item_search_section, parent, false));
+      case TYPE_HEADER, TYPE_LANDSCAPE_HEADER -> new HeaderViewHolder(inflater.inflate(R.layout.item_search_section, parent, false));
       case SearchResult.TYPE_SUGGEST, SearchResult.TYPE_PURE_SUGGEST ->
         new SuggestViewHolder(inflater.inflate(R.layout.item_search_suggest, parent, false));
       case SearchResult.TYPE_RESULT ->
@@ -294,7 +304,10 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
   public int getItemViewType(int position)
   {
     int resultIndex = mRows.resultIndex(position);
-    return resultIndex < 0 ? TYPE_HEADER : mResults[resultIndex].type;
+    if (resultIndex >= 0)
+      return mResults[resultIndex].type;
+    return mSearchFragment.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+        ? TYPE_LANDSCAPE_HEADER : TYPE_HEADER;
   }
 
   @Override

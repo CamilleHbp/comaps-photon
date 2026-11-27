@@ -34,7 +34,7 @@
     <string name="country_status_download_failed">Помилка завантаження</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Спробуйте ще раз</string>
-    <string name="about_menu_title">Про CoMaps</string>
+    <string name="about_menu_title">Про Maps</string>
     <!-- Text in About screen -->
     <string name="about_headline">Відкритий проєкт, що створюється спільнотою</string>
     <!-- Text in About screen -->
@@ -148,8 +148,8 @@
     <!-- Notes field in Bookmarks view -->
     <string name="description">Примітка</string>
     <!-- Email Subject when sharing bookmark list -->
-    <string name="share_bookmarks_email_subject">Мої улюблені місця в CoMaps</string>
-    <string name="share_bookmarks_email_body">Привіт! \n \nДодаю мої улюблені; відкрийте їх у CoMaps. Якщо застосунок не встановлено, ви можете завантажити його тут: https://www.comaps.app/download/ \n \nНасолоджуйтесь подорожами з CoMaps!</string>
+    <string name="share_bookmarks_email_subject">Мої улюблені місця в Maps</string>
+    <string name="share_bookmarks_email_body">Привіт! \n \nДодаю мої улюблені; відкрийте їх у CoMaps. Якщо застосунок не встановлено, ви можете завантажити його тут: https://www.comaps.app/download/ \n \nНасолоджуйтесь подорожами з Maps!</string>
     <!-- message title of loading file -->
     <string name="load_kmz_title">Завантаження улюблених</string>
     <!-- Kmz file successful loading -->
@@ -169,9 +169,9 @@
     <!-- Alert message that downloading is in progress. -->
     <string name="downloading_is_active">Зараз відбувається завантаження мапи</string>
     <!-- Share my position using SMS, %1$@ contains om:// and %2$@ https://comaps.app link WITHOUT NAME. @NOTE non-ascii symbols in the link will result in max 70 characters SMS instead of 140. -->
-    <string name="my_position_share_sms">Перевірте моє поточне розташування в CoMaps! %1$s або %2$s Немає автономних мап? Завантаж тут: https://www.comaps.app/download/</string>
+    <string name="my_position_share_sms">Перевірте моє поточне розташування в Maps! %1$s або %2$s Немає автономних мап? Завантаж тут: https://www.comaps.app/download/</string>
     <!-- Subject for emailed position -->
-    <string name="my_position_share_email_subject">Поглянь на моє поточне розташування на мапі CoMaps!</string>
+    <string name="my_position_share_email_subject">Поглянь на моє поточне розташування на мапі Maps!</string>
     <!-- Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. -->
     <string name="share">Подiлитись</string>
     <!-- Share by email button text, also used in editor and About. -->
@@ -469,7 +469,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">Примітка для волонтерів OpenStreetMap (необов\'язково)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">Опишіть помилки на мапі або те, що не можна редагувати за допомогою CoMaps</string>
+    <string name="editor_note_hint">Опишіть помилки на мапі або те, що не можна редагувати за допомогою Maps</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">Ваші правки завантажуються до публічної бази даних <a href="https://wiki.openstreetmap.org/wiki/Uk:Про_проект">OpenStreetMap</a>. Будь ласка, не додавайте особисту або захищену авторським правом інформацію.</string>
     <string name="editor_more_about_osm">Більше про OpenStreetMap</string>
@@ -479,7 +479,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations... -->
     <string name="operator">Оператор: %s</string>
     <string name="editor_category_unsuitable_title">Не можете знайти відповідну категорію?</string>
-    <string name="editor_category_unsuitable_text">CoMaps дозволяє додавати лише прості категорії точок; він не підтримує додавання міст, доріг, озер, контурів будівель тощо. Додавайте такі категорії безпосередньо на <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Ознайомтеся з нашим <a href="https://www.comaps.app/support/advanced-map-editing/">посібником</a>, щоб отримати докладні покрокові інструкції.</string>
+    <string name="editor_category_unsuitable_text">Maps дозволяє додавати лише прості категорії точок; він не підтримує додавання міст, доріг, озер, контурів будівель тощо. Додавайте такі категорії безпосередньо на <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Ознайомтеся з нашим <a href="https://www.comaps.app/support/advanced-map-editing/">посібником</a>, щоб отримати докладні покрокові інструкції.</string>
     <string name="downloader_no_downloaded_maps_title">Ви не маєте завантажених мап</string>
     <string name="downloader_no_downloaded_maps_message">Завантажте необхідні мапи для пошуку та навігацією без iнтернету</string>
     <string name="current_location_unknown_error_title">Розташування не знайдено</string>
@@ -532,7 +532,7 @@
     <string name="mobile_data_option_ask">Завжди питати</string>
     <string name="traffic_update_maps_text">Для показу інформації про трафік необхідно оновити мапи</string>
     <string name="increase_font_size">Збільшити розмір шрифту на мапі</string>
-    <string name="traffic_update_app">Будь ласка, встановіть оновлення CoMaps</string>
+    <string name="traffic_update_app">Будь ласка, встановіть оновлення Maps</string>
     <!-- "traffic" as in "road congestion" -->
     <string name="traffic_data_unavailable">Дані про трафік недоступні</string>
     <string name="enable_logging">Увімкнути журналювання</string>
@@ -748,9 +748,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">Наша головна мета – створити швидкі, приватні та прості у використанні мапи, які вам сподобаються.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Зараз ви використовуєте CoMaps на екрані телефону</string>
+    <string name="car_used_on_the_phone_screen">Зараз ви використовуєте Maps на екрані телефону</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Ви використовуєте CoMaps на екрані автомобіля</string>
+    <string name="car_used_on_the_car_screen">Ви використовуєте Maps на екрані автомобіля</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">Ви під\'єднанні до Android Auto</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -758,11 +758,11 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">На екран автомобіля</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">Для роботи CoMaps потрібен доступ до розташування. Коли це буде безпечно, перевірте сповіщення на телефоні.</string>
+    <string name="aa_location_permissions_request">Для роботи Maps потрібен доступ до розташування. Коли це буде безпечно, перевірте сповіщення на телефоні.</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">Ця програма потребує вашого дозволу</string>
     <!-- The text in the activity for location permission request. -->
-    <string name="aa_request_permission_activity_text">Для ефективної роботи CoMaps в Android Auto потрібні дозвіли на розташування</string>
+    <string name="aa_request_permission_activity_text">Для ефективної роботи Maps в Android Auto потрібні дозвіли на розташування</string>
     <!-- Grant Permissions button. -->
     <string name="aa_grant_permissions">Надавати дозволи</string>
     <!-- Outdoors/hiking map style (activity) name in the Styles and Layers dialog -->
@@ -942,7 +942,7 @@
     <string name="not_following_route">Відхилення від маршруту</string>
     <string name="route_recalculating">Перерахунок маршруту…</string>
     <string name="pref_openexternallinks_title">Автоматично відкривати сторонні посилання</string>
-    <string name="pref_openexternallinks_summary">Типово відкривати сторонні посилання в CoMaps</string>
+    <string name="pref_openexternallinks_summary">Типово відкривати сторонні посилання в Maps</string>
     <string name="population">Населення: %s</string>
     <string name="change_app_locale">Мова застосунку</string>
     <string name="downloader_check_updates_button">Перевірити наявність оновлень</string>

@@ -27,9 +27,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
 import app.organicmaps.sdk.Framework;
+import app.organicmaps.sdk.routing.OnlineRouting;
 import app.organicmaps.sdk.bookmarks.data.DistanceAndAzimut;
 import app.organicmaps.sdk.routing.RouteMarkData;
 import app.organicmaps.sdk.routing.RouteMarkType;
@@ -38,7 +38,6 @@ import app.organicmaps.sdk.routing.RoutingInfo;
 import app.organicmaps.sdk.routing.TransitRouteInfo;
 import app.organicmaps.sdk.routing.TransitStepInfo;
 import app.organicmaps.sdk.util.Distance;
-import app.organicmaps.util.Graphics;
 import app.organicmaps.util.ThemeUtils;
 import app.organicmaps.util.UiUtils;
 import app.organicmaps.util.Utils;
@@ -80,11 +79,10 @@ final class RoutingBottomMenuController implements View.OnClickListener
   @NonNull
   private final View mActionFrame;
   @NonNull
-  private final MaterialTextView mActionMessage;
+  private final android.widget.TextView mStartValue;
+  private final android.widget.TextView mFinishValue;
   @NonNull
   private final View mActionButton;
-  @NonNull
-  private final ShapeableImageView mActionIcon;
   @NonNull
   private final DotDividerItemDecoration mTransitViewDecorator;
 
@@ -139,13 +137,18 @@ final class RoutingBottomMenuController implements View.OnClickListener
     mTimeVehicle = timeVehicle;
     mArrival = arrival;
     mActionFrame = actionFrame;
-    mActionMessage = actionFrame.findViewById(R.id.tv__message);
+    mStartValue = actionFrame.findViewById(R.id.route_start_value);
+    mFinishValue = actionFrame.findViewById(R.id.route_finish_value);
     mActionButton = actionFrame.findViewById(R.id.btn__my_position_use);
     mActionButton.setOnClickListener(this);
-    View actionSearchButton = actionFrame.findViewById(R.id.btn__search_point);
-    actionSearchButton.setOnClickListener(this);
-    mActionIcon = mActionButton.findViewById(R.id.iv__icon);
-    UiUtils.hide(mAltitudeChartFrame, mActionFrame);
+    actionFrame.findViewById(R.id.route_start_row).setOnClickListener(v -> listener.onSearchRoutePoint(RouteMarkType.Start));
+    actionFrame.findViewById(R.id.route_finish_row).setOnClickListener(v -> listener.onSearchRoutePoint(RouteMarkType.Finish));
+    actionFrame.findViewById(R.id.swap_endpoints).setOnClickListener(v -> {
+      RoutingController routing = RoutingController.get();
+      if (Framework.nativeGetRoutePoints().length <= 2)
+        routing.prepare(routing.getEndPoint(), routing.getStartPoint(), routing.getLastRouterType());
+    });
+    UiUtils.hide(mAltitudeChartFrame);
     mListener = listener;
     int dividerRes = ThemeUtils.getResource(mContext, R.attr.transitStepDivider);
     Drawable dividerDrawable = ContextCompat.getDrawable(mContext, dividerRes);
@@ -155,6 +158,8 @@ final class RoutingBottomMenuController implements View.OnClickListener
                                      res.getDimensionPixelSize(R.dimen.margin_half));
     MaterialButton manageRouteButton = altitudeChartFrame.findViewById(R.id.btn__manage_route);
     manageRouteButton.setOnClickListener(this);
+    altitudeChartFrame.findViewById(R.id.btn__add_stop).setOnClickListener(v ->
+        RouteStopPicker.show(mContext, () -> mListener.onSearchRoutePoint(RouteMarkType.Intermediate)));
 
     MaterialButton directionsPreviewButton = altitudeChartFrame.findViewById(R.id.btn__directions_preview);
     directionsPreviewButton.setOnClickListener(this);
@@ -165,11 +170,12 @@ final class RoutingBottomMenuController implements View.OnClickListener
 
   void showAltitudeChartAndRoutingDetails()
   {
-    UiUtils.hide(mError, mActionFrame, mAltitudeChart, mTimeElevationLine, mTransitFrame);
+    UiUtils.hide(mError, mAltitudeChart, mTimeElevationLine, mTransitFrame);
 
     if (!RoutingController.get().isVehicleRouterType() && !RoutingController.get().isRulerRouterType())
       showRouteAltitudeChart();
     showRoutingDetails();
+    UiUtils.showIf(RoutingController.get().isStopPointAllowed(), mAltitudeChartFrame.findViewById(R.id.btn__add_stop));
     UiUtils.show(mAltitudeChartFrame);
     MaterialButton saveButton = mAltitudeChartFrame.findViewById(R.id.btn__save);
     saveButton.setContentDescription(mContext.getString(R.string.save));
@@ -185,7 +191,7 @@ final class RoutingBottomMenuController implements View.OnClickListener
   @SuppressLint("SetTextI18n")
   void showTransitInfo(@NonNull TransitRouteInfo info)
   {
-    UiUtils.hide(mError, mAltitudeChartFrame, mActionFrame);
+    UiUtils.hide(mError, mAltitudeChartFrame);
     showStartButton(false);
     UiUtils.show(mTransitFrame);
     RecyclerView rv = mTransitFrame.findViewById(R.id.transit_recycler_view);
@@ -211,7 +217,7 @@ final class RoutingBottomMenuController implements View.OnClickListener
   @SuppressLint("SetTextI18n")
   void showRulerInfo(@NonNull RouteMarkData[] points, Distance totalLength)
   {
-    UiUtils.hide(mError, mAltitudeChartFrame, mActionFrame, mAltitudeChartFrame);
+    UiUtils.hide(mError, mAltitudeChartFrame, mAltitudeChartFrame);
     showStartButton(false);
     UiUtils.show(mTransitFrame);
     final RecyclerView rv = mTransitFrame.findViewById(R.id.transit_recycler_view);
@@ -262,35 +268,24 @@ final class RoutingBottomMenuController implements View.OnClickListener
   void showAddStartFrame()
   {
     UiUtils.hide(mError, mTransitFrame);
-    UiUtils.show(mActionFrame);
-    mActionMessage.setText(R.string.routing_add_start_point);
-    mActionMessage.setTag(RouteMarkType.Start);
-    if (MwmApplication.from(mContext).getLocationHelper().getMyPosition() != null)
-    {
-      UiUtils.show(mActionButton);
-      Drawable icon = ContextCompat.getDrawable(mContext, R.drawable.ic_location_crosshair);
-      int colorSecondary = ContextCompat.getColor(
-          mContext, UiUtils.getStyledResourceId(mContext, com.google.android.material.R.attr.colorSecondary));
-      mActionIcon.setImageDrawable(Graphics.tint(icon, colorSecondary));
-    }
-    else
-    {
-      UiUtils.hide(mActionButton);
-    }
+    showEndpoints();
   }
 
   void showAddFinishFrame()
   {
     UiUtils.hide(mError, mTransitFrame);
-    UiUtils.show(mActionFrame);
-    mActionMessage.setText(R.string.routing_add_finish_point);
-    mActionMessage.setTag(RouteMarkType.Finish);
-    UiUtils.hide(mActionButton);
+    showEndpoints();
   }
 
-  void hideActionFrame()
+  void showEndpoints()
   {
-    UiUtils.hide(mActionFrame);
+
+    var start = RoutingController.get().getStartPoint();
+    var finish = RoutingController.get().getEndPoint();
+    UiUtils.showIf((start != null || finish != null) && Framework.nativeGetRoutePoints().length <= 2,
+                   mActionFrame.findViewById(R.id.swap_endpoints));
+    mStartValue.setText(start == null ? null : start.isMyPosition() ? mContext.getString(app.organicmaps.sdk.R.string.core_my_position) : start.getTitle());
+    mFinishValue.setText(finish == null ? null : finish.isMyPosition() ? mContext.getString(app.organicmaps.sdk.R.string.core_my_position) : finish.getTitle());
   }
 
   void setStartButton(boolean show)
@@ -312,7 +307,7 @@ final class RoutingBottomMenuController implements View.OnClickListener
 
   private void showError(@NonNull String message)
   {
-    UiUtils.hide(mAltitudeChartFrame, mActionFrame, mTransitFrame);
+    UiUtils.hide(mAltitudeChartFrame, mTransitFrame);
     mError.setText(message);
     mError.setVisibility(View.VISIBLE);
     showStartButton(false);
@@ -321,6 +316,9 @@ final class RoutingBottomMenuController implements View.OnClickListener
   void showStartButton(boolean show)
   {
     boolean result = show && RoutingController.get().isBuilt();
+    boolean canNavigate = OnlineRouting.nativeCanNavigate();
+    mStart.setEnabled(canNavigate);
+    mStart.setText(canNavigate ? R.string.p2p_start : app.organicmaps.sdk.R.string.online_route_navigation_locked);
     UiUtils.showIf(result, mStart);
   }
 
@@ -419,6 +417,9 @@ final class RoutingBottomMenuController implements View.OnClickListener
 
     initDistanceBuilderSequence(context, routingInfo.distToTarget.toString(context), builder);
 
+    if (RoutingController.get().isVehicleRouterType())
+      builder.append("\n").append(OnlineRouting.statusText(context));
+
     return builder;
   }
 
@@ -471,11 +472,6 @@ final class RoutingBottomMenuController implements View.OnClickListener
     final int id = v.getId();
     if (id == R.id.btn__my_position_use)
       mListener.onUseMyPositionAsStart();
-    else if (id == R.id.btn__search_point)
-    {
-      final RouteMarkType pointType = (RouteMarkType) mActionMessage.getTag();
-      mListener.onSearchRoutePoint(pointType);
-    }
     else if (id == R.id.btn__manage_route)
       mListener.onManageRouteOpen();
     else if (id == R.id.btn__directions_preview)

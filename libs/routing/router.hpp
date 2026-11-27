@@ -25,6 +25,7 @@ using GuidesTracks = std::map<kml::MarkGroupId, std::vector<std::vector<geometry
 class Checkpoints;
 class Route;
 class RouterDelegate;
+class RoutingOptions;
 
 struct EdgeProj
 {
@@ -58,6 +59,9 @@ public:
 
   /// Clear all temporary buffers.
   virtual void ClearState() {}
+  virtual void StartNewJourney() {}
+  virtual bool UsesLocalMaps() const { return true; }
+  virtual void SetOptionsForRequest(RoutingOptions const &) {}
 
   virtual void SetGuides(GuidesTracks && guides) = 0;
 

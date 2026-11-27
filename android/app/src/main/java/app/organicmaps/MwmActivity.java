@@ -216,6 +216,10 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @SuppressWarnings("NotNullFieldNotInitialized")
   @NonNull
   private ActivityResultLauncher<String[]> mLocationPermissionRequest;
+  private final Runnable mCheckRouteOrigin = this::applyRouteOriginWhenReady;
+  private long mRouteOriginDeadline;
+  private boolean mWaitingForRouteOrigin;
+  @Nullable private MapObject mPreviousRouteOrigin;
   private boolean mLocationPermissionRequestedForRecording = false;
 
   @SuppressWarnings("NotNullFieldNotInitialized")
@@ -905,6 +909,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
     case myPosition ->
     {
       Logger.i(LOCATION_TAG, "The location button pressed");
+      if (!LocationUtils.checkLocationPermission(this))
+      {
+        mLocationPermissionRequest.launch(new String[] {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION});
+        return;
+      }
       // Calls onMyPositionModeChanged(mode + 1).
       LocationState.nativeSwitchToNextMode();
     }
@@ -1049,11 +1058,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     if (isFullscreen())
       setFullscreen(false);
 
-    // Calls onMyPositionModeChanged(PENDING_POSITION).
-    LocationState.nativeStartPendingPositionMode();
-
-    MapObject startPoint = MwmApplication.from(this).getLocationHelper().getMyPosition();
-    RoutingController.get().prepare(startPoint, endPoint);
+    RoutingController.get().prepare(null, endPoint);
 
     // TODO: check for tablet.
     closePlacePage();
@@ -1271,6 +1276,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @Override
   protected void onSafeDestroy()
   {
+    mWaitingForRouteOrigin = false;
+    getWindow().getDecorView().removeCallbacks(mCheckRouteOrigin);
     super.onSafeDestroy();
     mLocationPermissionRequest.unregister();
     mLocationPermissionRequest = null;
@@ -1730,6 +1737,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @Override
   public void onPlanningCancelled()
   {
+    mWaitingForRouteOrigin = false;
     closeFloatingToolbarsAndPanels(true);
     mMapButtonsViewModel.setLayoutMode(MapButtonsController.LayoutMode.regular);
     refreshLightStatusBar();
@@ -1769,6 +1777,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @Override
   public void onBuiltRoute()
   {
+    if (RoutingController.get().isVehicleRouterType() && RoutingController.get().isNavigating() &&
+        app.organicmaps.sdk.routing.OnlineRouting.nativeGetStatus()[1] != 0)
+      Toast.makeText(this, app.organicmaps.sdk.routing.OnlineRouting.statusText(this), Toast.LENGTH_LONG).show();
     if (!RoutingController.get().isPlanning())
       return;
 
@@ -1787,6 +1798,18 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @Override
   public void onCommonBuildError(int lastResultCode, @NonNull String[] lastMissingMaps)
   {
+    if (RoutingController.get().isVehicleRouterType() &&
+        app.organicmaps.sdk.routing.OnlineRouting.nativeGetStatus()[2] != 0)
+    {
+      Toast.makeText(this, app.organicmaps.sdk.routing.OnlineRouting.statusText(this), Toast.LENGTH_LONG).show();
+      if (lastResultCode != app.organicmaps.sdk.routing.ResultCodes.NEED_MORE_MAPS)
+      {
+        new MaterialAlertDialogBuilder(this).setTitle(R.string.unable_to_calc_alert_title)
+            .setMessage(app.organicmaps.sdk.routing.OnlineRouting.statusText(this))
+            .setPositiveButton(android.R.string.ok, null).show();
+        return;
+      }
+    }
     RoutingErrorDialogFragment fragment = RoutingErrorDialogFragment.create(
         getSupportFragmentManager().getFragmentFactory(), getApplicationContext(), lastResultCode, lastMissingMaps);
     fragment.show(getSupportFragmentManager(), RoutingErrorDialogFragment.class.getSimpleName());
@@ -1877,9 +1900,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
         .setPositiveButton(R.string.ok, endPoint.isMyPosition() ?
             (dialog, which) -> controller.swapPoints() :
             (dialog, which) -> {
-              // The current location may change while this dialog is still shown on the screen.
-              final MapObject myPosition = MwmApplication.from(this).getLocationHelper().getMyPosition();
-              controller.setStartPoint(myPosition);
+              onUseMyPositionAsStart();
             }
         )
         .setOnDismissListener(dialog -> mAlertDialog = null);
@@ -1915,9 +1936,6 @@ public class MwmActivity extends BaseMwmFragmentActivity
       // Calls onMyPositionModeChanged(NOT_FOLLOW_NO_POSITION).
       LocationState.nativeOnLocationError(LocationState.ERROR_DENIED);
 
-      Logger.i(LOCATION_TAG, "Requesting ACCESS_FINE_LOCATION + ACCESS_FINE_LOCATION permissions");
-      dismissLocationErrorDialog();
-      mLocationPermissionRequest.launch(new String[] {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION});
       return;
     }
 
@@ -1963,6 +1981,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
     dismissLocationErrorDialog();
 
     final RoutingController routing = RoutingController.get();
+    if (mWaitingForRouteOrigin)
+      applyRouteOriginWhenReady();
     if (!routing.isNavigating())
       return;
 
@@ -1975,6 +1995,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @UiThread
   public void onLocationUpdateTimeout()
   {
+    if (mWaitingForRouteOrigin)
+    {
+      mWaitingForRouteOrigin = false;
+      Toast.makeText(this, R.string.planner_location_unavailable, Toast.LENGTH_LONG).show();
+      return;
+    }
     requestBatterySaverPermission();
   }
 
@@ -2088,6 +2114,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
       return;
     }
 
+    mWaitingForRouteOrigin = false;
     Logger.w(LOCATION_TAG, "Permissions ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION have been refused");
     // Calls onMyPositionModeChanged(NOT_FOLLOW_NO_POSITION).
     LocationState.nativeOnLocationError(LocationState.ERROR_DENIED);
@@ -2159,6 +2186,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
     if (resultCode != Activity.RESULT_OK)
     {
+      mWaitingForRouteOrigin = false;
       Logger.w(LOCATION_TAG, "Location resolution has been refused");
       // Calls onMyPositionModeChanged(NOT_FOLLOW_NO_POSITION).
       LocationState.nativeOnLocationError(LocationState.ERROR_GPS_OFF);
@@ -2178,6 +2206,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @UiThread
   public void onLocationDisabled()
   {
+    mWaitingForRouteOrigin = false;
     Logger.d(LOCATION_TAG, "settings = " + LocationUtils.areLocationServicesTurnedOn(this));
 
     // Calls onMyPositionModeChanged(NOT_FOLLOW_NO_POSITION).
@@ -2208,12 +2237,50 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @Override
   public void onUseMyPositionAsStart()
   {
-    RoutingController.get().setStartPoint(MwmApplication.from(this).getLocationHelper().getMyPosition());
+    mPreviousRouteOrigin = RoutingController.get().getStartPoint();
+    mWaitingForRouteOrigin = true;
+    mRouteOriginDeadline = 0;
+    if (!LocationUtils.checkLocationPermission(this))
+      mLocationPermissionRequest.launch(new String[] {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION});
+    else if (MwmApplication.from(this).getLocationHelper().getMyPosition() == null)
+      LocationState.nativeStartPendingPositionMode();
+    else
+      applyRouteOriginWhenReady();
+  }
+
+  private void applyRouteOriginWhenReady()
+  {
+    View view = getWindow().getDecorView();
+    view.removeCallbacks(mCheckRouteOrigin);
+    RoutingController routing = RoutingController.get();
+    if (!mWaitingForRouteOrigin || !routing.isPlanning() || !MapObject.same(mPreviousRouteOrigin, routing.getStartPoint()))
+    {
+      mWaitingForRouteOrigin = false;
+      return;
+    }
+    MapObject position = MwmApplication.from(this).getLocationHelper().getMyPosition();
+    if (position == null)
+      return;
+    // The map processes the first Android fix asynchronously. Routing reads the core's position mark.
+    if (Framework.nativeHasPositionForRouting())
+    {
+      mWaitingForRouteOrigin = false;
+      routing.setStartPoint(position);
+      return;
+    }
+    long now = android.os.SystemClock.uptimeMillis();
+    if (mRouteOriginDeadline == 0)
+      mRouteOriginDeadline = now + 15000;
+    if (now >= mRouteOriginDeadline)
+      onLocationUpdateTimeout();
+    else
+      view.postDelayed(mCheckRouteOrigin, 150);
   }
 
   @Override
   public void onSearchRoutePoint(@NonNull RouteMarkType pointType)
   {
+    mWaitingForRouteOrigin = false;
     RoutingController.get().waitForPoiPick(pointType);
     closeSearchToolbar(true, true);
     showSearch("");

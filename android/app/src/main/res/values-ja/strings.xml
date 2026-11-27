@@ -169,7 +169,7 @@
     <!-- Alert message that downloading is in progress. -->
     <string name="downloading_is_active">マップのダウンロード中です</string>
     <!-- Share my position using SMS, %1$@ contains om:// and %2$@ https://comaps.app link WITHOUT NAME. @NOTE non-ascii symbols in the link will result in max 70 characters SMS instead of 140. -->
-    <string name="my_position_share_sms">CoMaps で私の現在地が見れます！%1$s または %2$s オフラインマップはまだインストールしていないですか？ここからダウンロード： https://www.comaps.app/download/</string>
+    <string name="my_position_share_sms">Maps で私の現在地が見れます！%1$s または %2$s オフラインマップはまだインストールしていないですか？ここからダウンロード： https://www.comaps.app/download/</string>
     <!-- Subject for emailed position -->
     <string name="my_position_share_email_subject">CoMapsで現在地を確認！</string>
     <!-- Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. -->
@@ -534,7 +534,7 @@
     <string name="mobile_data_option_ask">常に確認</string>
     <string name="traffic_update_maps_text">交通データを表示するには、マップを更新する必要があります</string>
     <string name="increase_font_size">地図上のフォントサイズを大きくする</string>
-    <string name="traffic_update_app">CoMaps をアップデートしてください</string>
+    <string name="traffic_update_app">Maps をアップデートしてください</string>
     <!-- "traffic" as in "road congestion" -->
     <string name="traffic_data_unavailable">交通データは利用できません</string>
     <string name="enable_logging">ログを有効化</string>

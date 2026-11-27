@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<?xml version="1.0" ?>
+<merge
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:orientation="vertical">
-  <androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:minHeight="56dp"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="8dp">
     <com.google.android.material.textview.MaterialTextView
       android:id="@+id/layers_text"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
+      android:layout_weight="1"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/margin_base"
-      android:layout_marginTop="@dimen/margin_base"
-      android:text="@string/layers_title"
-      android:textAppearance="@style/MwmTextAppearance.Headline6"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.button.MaterialButton
+      android:paddingTop="12dp"
+      android:paddingBottom="12dp"
+      android:text="@string/saved_layers_panel_title"
+      android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+      android:textColor="?android:attr/textColorPrimary"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+      android:id="@+id/layer_options"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_marginEnd="8dp"
+      android:background="?selectableItemBackgroundBorderless"
+      android:contentDescription="@string/saved_layers_options"
+      app:srcCompat="@drawable/ic_more"
+      app:tint="?android:attr/textColorPrimary"
+      android:padding="12dp"/>
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/close_button"
-      style="@style/Widget.Material3.Button.UnelevatedButton"
-      android:layout_width="@dimen/place_page_top_button"
-      android:layout_height="@dimen/place_page_top_button"
-      android:layout_marginEnd="@dimen/margin_half_plus"
-      android:layout_marginTop="@dimen/margin_half_plus"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
       android:background="?selectableItemBackgroundBorderless"
       android:contentDescription="@string/close"
-      app:icon="@drawable/ic_close"
-      app:iconGravity="textStart"
-      app:iconPadding="0dp"
-      app:iconSize="24dp"
-      app:iconTint="?iconTint"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Button.Round" />
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
+      app:srcCompat="@drawable/ic_close"
+      app:tint="?android:attr/textColorPrimary"
+      android:padding="12dp"/>
+  </LinearLayout>
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_base"
-    android:minHeight="@dimen/toggle_map_layer_frame_height"
-    android:paddingStart="@dimen/margin_base"
-    android:paddingEnd="@dimen/margin_base" />
-</LinearLayout>
+    android:clipToPadding="false"
+    android:paddingBottom="16dp"
+    android:scrollbars="vertical"/>
+</merge>

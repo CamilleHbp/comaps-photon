@@ -7,10 +7,12 @@
   <string name="photon_endpoint_hint">Adresse HTTPS de base du serveur Photon. Le serveur de démonstration public de Komoot est destiné à des essais limités.</string>
   <string name="photon_endpoint_invalid">Saisissez une adresse de serveur HTTPS sans identifiants, paramètres de requête ni fragment.</string>
   <string name="photon_online">En ligne · Photon</string>
-  <string name="photon_offline">Hors ligne · CoMaps</string>
+  <string name="photon_offline">Hors ligne · Cartes</string>
   <string name="photon_loading">Recherche en ligne…</string>
-  <string name="photon_empty">Aucun résultat en ligne. Les résultats hors ligne sont affichés ci-dessous.</string>
+  <string name="photon_empty">Aucun résultat en ligne. Essayez d’ajouter une ville proche à votre recherche.</string>
   <string name="photon_unavailable">Recherche en ligne indisponible. La recherche hors ligne reste disponible.</string>
   <string name="photon_throttled">Le serveur est occupé. Veuillez réessayer plus tard.</string>
   <string name="photon_search_disclosure">Les requêtes et la position du centre de la carte sont envoyées à %1$s. La recherche uniquement hors ligne est disponible dans Paramètres → Confidentialité.</string>
+  <string name="search_by_voice">Rechercher par commande vocale</string>
+  <string name="search_contact_address">Rechercher l’adresse d’un contact</string>
 </resources>

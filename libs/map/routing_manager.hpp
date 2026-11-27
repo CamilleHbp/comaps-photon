@@ -5,6 +5,7 @@
 #include "map/transit/transit_display.hpp"
 
 #include "routing/route.hpp"
+#include "routing/valhalla_router.hpp"
 #include "routing/router.hpp"
 #include "routing/router_delegate.hpp"
 #include "routing/routing_callbacks.hpp"
@@ -149,6 +150,12 @@ public:
   routing::RouterType GetRouter() const { return m_currentRouterType; }
   bool IsRoutingActive() const { return m_routingSession.IsActive(); }
   bool IsRouteBuilt() const { return m_routingSession.IsBuilt(); }
+  bool CanFollowRoute() const { return m_routingSession.CanFollowRoute(); }
+  void SetCarRoutingTransport(routing::OnlineTransport transport);
+  static routing::CarRoutingConfig GetCarRoutingConfig();
+  bool SetCarRoutingConfig(routing::CarRoutingConfig const & config);
+  routing::CarRoutingFailure GetCarRoutingFailure() const { return m_carRoutingState->failure.load(); }
+  routing::CarFallbackReason GetCarRoutingFailureReason() const { return m_carRoutingState->reason.load(); }
   bool IsRouteBuilding() const { return m_routingSession.IsBuilding(); }
   bool IsRouteRebuildingOnly() const { return m_routingSession.IsRebuildingOnly(); }
   bool IsRouteFinished() const { return m_routingSession.IsFinished(); }
@@ -396,6 +403,8 @@ private:
   routing::RouterType m_currentRouterType = routing::RouterType::Count;
   bool m_loadAltitudes = false;
   routing::RoutingSession m_routingSession;
+  routing::OnlineTransport m_carTransport;
+  std::shared_ptr<routing::CarRoutingState> m_carRoutingState = std::make_shared<routing::CarRoutingState>();
   Delegate & m_delegate;
 
   BookmarkManager * m_bmManager = nullptr;

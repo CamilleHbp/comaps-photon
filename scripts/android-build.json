@@ -55,6 +55,8 @@
     "libs/platform/*_win.*",
     "libs/platform/*_mac.*",
     "libs/platform/*_qt.*",
-    "libs/map/benchmark_tool/*"
+    "libs/map/benchmark_tool/*",
+    "libs/routing/routes_builder/*",
+    "libs/routing/routing_quality/*"
   ]
 }

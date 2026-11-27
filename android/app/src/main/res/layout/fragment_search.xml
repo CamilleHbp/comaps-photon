@@ -104,6 +104,7 @@
       style="@style/MwmWidget.M3.FAB.Primary"
       android:layout_gravity="bottom|end"
       android:layout_margin="@dimen/margin_base"
+      android:contentDescription="@string/search_contact_address"
       app:srcCompat="@drawable/ic_contacts"/>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>

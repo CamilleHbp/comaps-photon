@@ -61,6 +61,9 @@ public:
     Checkpoints m_checkpoints;
     uint32_t m_timeoutSeconds = RouterDelegate::kNoTimeout;
     uint32_t m_launchesNumber = 1;
+    // Diagnostic-only options/results are exported by routing_compare_tool,
+    // not appended to the historical binary dump format.
+    bool m_disableLeaps = false;
   };
 
   struct Route
@@ -73,6 +76,7 @@ public:
 
     double m_eta = 0.0;
     double m_distance = 0.0;
+    bool m_hasToll = false;
     FollowedPolyline m_followedPolyline;
   };
 
