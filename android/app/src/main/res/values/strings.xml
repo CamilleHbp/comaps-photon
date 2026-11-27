@@ -2,7 +2,7 @@
 <resources>
     <!-- Project only name, app_name is added to strings in build.gradle & can contain "Debug" etc. prefixes. -->
     <string name="project_name" translatable="false">Maps</string>
-    <string name="app_site_url">https://comaps.app/</string>
+    <string name="app_site_url">https://maps.camille.studio/</string>
     <!-- SECTION: Strings -->
     <!-- Button text (should be short) -->
     <string name="back">Back</string>
@@ -159,7 +159,7 @@
     <string name="share_bookmarks_email_subject">My Maps Favorites</string>
     <string name="share_bookmarks_email_body">Hello!
 \n
-\nAttached are my Favorites; please open them in CoMaps. If you don\'t have it installed you can download it here: https://www.comaps.app/download/
+\nAttached are my Favorites; please open them in Maps. If you don\'t have it installed you can download it here: https://download.camille.studio/#comaps-photon
 \n
 \nEnjoy travelling with Maps!</string>
     <!-- message title of loading file -->
@@ -184,7 +184,7 @@
     <!-- Alert message that downloading is in progress. -->
     <string name="downloading_is_active">Map download is in progress now</string>
     <!-- Share my position using SMS, %1$@ contains om:// and %2$@ https://comaps.app link WITHOUT NAME. @NOTE non-ascii symbols in the link will result in max 70 characters SMS instead of 140. -->
-    <string name="my_position_share_sms">Check out my current location in Maps! %1$s or %2$s Don\'t have offline maps? Download here: https://www.comaps.app/download/</string>
+    <string name="my_position_share_sms">Check out my current location in Maps! %1$s or %2$s Don\'t have offline maps? Download here: https://download.camille.studio/#comaps-photon</string>
     <!-- Share a position using EMail, %1$@ is https://comaps.at link WITH NAME and %2$@ is the geo url containing only coordinates.  -->
     <string name="bookmark_share_email_subject">Follow this link %1$s or paste these coordinates %2$s into your maps app to see this location.</string>
     <!-- Subject for emailed position -->
@@ -527,7 +527,7 @@
     <!-- Text in About and OSM Login screens. First %@ is replaced by a local, human readable date. -->
     <string name="osm_presentation">Community-created OpenStreetMap data as of %s. Learn more about how to edit and update the map at OpenStreetMap.org</string>
     <!-- OSM explanation on Android login screen -->
-    <string name="login_osm_presentation">OpenStreetMap.org (OSM) is a community project to build a free and open map. It\'s the main source of map data in CoMaps and works similar to Wikipedia. You can add or edit places and they become available to millions of users all over the World.
+    <string name="login_osm_presentation">OpenStreetMap.org (OSM) is a community project to build a free and open map. It\'s the main source of map data in Maps and works similar to Wikipedia. You can add or edit places and they become available to millions of users all over the World.
 \nJoin the community and help to make a better map for everyone!</string>
     <string name="login_to_make_edits_visible">Create an OpenStreetMap account or log in to publish your map edits to the world</string>
     <!-- Downloaded 10 **of** 20 <- it is that "of" -->

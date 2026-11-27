@@ -10,6 +10,10 @@ Maps began as a fork of [CoMaps](https://codeberg.org/comaps/comaps), which grew
 
 On Android, use the layers panel to choose which saved places appear on the map. The web app keeps saved places in the browser. Its driving planner can avoid tolls and motorways and find places near a route. Online route previews use Valhalla after you allow the app to send the route coordinates.
 
+![Three saved places in Paris beside a map with OpenStreetMap attribution.](docs/screenshots/saved-places.png)
+
+*Open Saved to find places you have bookmarked in this browser.*
+
 ![Desktop map with a driving route and places to add along the way.](docs/screenshots/along-route.png)
 
 *Pick a place along a route to add it as a stop.*
