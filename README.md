@@ -1,28 +1,24 @@
 # Maps
 
-Download an area on Android to search its streets, follow a route and save places without a connection. In a browser, you can look up an address with Photon, save a place or preview a drive with several stops.
+Download a region before a trip to search streets, save places and navigate offline on Android. In a browser, you can plan a drive with several stops and share a place by its coordinates.
 
-Maps began as a fork of [CoMaps](https://codeberg.org/comaps/comaps), which grew out of Organic Maps and MAPS.ME. This project maintains a bilingual web companion, Photon search alongside the Android offline index, and an OsmAnd favorites importer that checks for duplicates.
+[Open the web map](https://maps.camille.studio) · [Download Maps for Android](https://download.camille.studio/#comaps-photon)
 
-[Open Maps in your browser](https://maps.camille.studio) · [Download the Android app](https://download.camille.studio)
+## Plan a drive
 
-## Places and directions
+Search for a destination and save it if you’ll need it again. Open directions, choose a starting point and add stops in the order you want to visit them. The web planner can avoid tolls or motorways. To find somewhere for lunch along the way, search near the route and add a result as a stop.
 
-On Android, use the layers panel to choose which saved places appear on the map. The web app keeps saved places in the browser. Its driving planner can avoid tolls and motorways and find places near a route. Online route previews use Valhalla after you allow the app to send the route coordinates.
+<a href="docs/screenshots/along-route.png"><img src="docs/screenshots/along-route.png" width="640" alt="Driving route on an OpenStreetMap map of Paris with a place search alongside the route"></a>
 
-![Three saved places in Paris beside a map with OpenStreetMap attribution.](docs/screenshots/saved-places.png)
+*Adding a place inserts it on the nearest leg and recalculates the drive. Map data © OpenStreetMap contributors.*
 
-*Open Saved to find places you have bookmarked in this browser.*
+## Take saved places with you
 
-![Desktop map with a driving route and places to add along the way.](docs/screenshots/along-route.png)
+On Android, download the area while you have a connection. Search the offline map or use Photon for an online lookup. The layers panel controls which saved places appear. If you already use OsmAnd, the favorites importer checks for duplicates.
 
-*Pick a place along a route to add it as a stop.*
+The browser keeps bookmarks on the device where you saved them. Share coordinates to open a place elsewhere. Web searches use Photon and route previews send stop coordinates to Valhalla with your permission. Use Android for downloaded maps and turn-by-turn directions.
 
-![Mobile directions panel showing a route preview and its distance.](docs/screenshots/directions.png)
-
-*Preview a drive before opening the native app for navigation.*
-
-See the [web guide](web/README.md) for hosting and data-service details. The [build guide](docs/INSTALL.md) covers the native application.
+Maps started as a fork of [CoMaps](https://codeberg.org/comaps/comaps), descended from Organic Maps and MAPS.ME. This project independently maintains the bilingual web planner, Android Photon search and OsmAnd favorites import. [Web guide](web/README.md) · [Build the native app](docs/INSTALL.md)
 
 ## Credits and licenses
 

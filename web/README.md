@@ -1,8 +1,16 @@
-# Maps web
+# Maps for the web
 
-An installable web companion to the native Maps app. Provides an OpenStreetMap map, explicit-submit Photon searches, local saved places, shareable coordinates, geolocation, multi-stop driving routes with toll and motorway avoidance, searches for places along a route, and CoMaps deep links. English and French follow browser preferences, with a persistent language override in Settings.
+Search for an address, save a meeting point or plan a drive with several stops. [Open Maps](https://maps.camille.studio) · [Get the Android app](../README.md)
 
-Saved places and the app shell work offline. This is not a WebAssembly port of the native CoMaps engine: offline map downloads, offline search, and turn-by-turn navigation remain native-app features. Saved places are local to each origin and are not shared between domains.
+## Find a place and plan a route
+
+Submit a name or address to search with Photon. Select a result to save it in this browser or share its coordinates. For a drive, choose a starting point and destination. The route planner asks before sending your stops to Valhalla. You can avoid tolls or motorways, or search near the route for a place to stop.
+
+<a href="../docs/screenshots/directions.png"><img src="../docs/screenshots/directions.png" width="240" alt="Mobile driving preview showing the route, estimated time and distance"></a>
+
+*Preview the trip in the browser and open Maps on Android for turn-by-turn navigation.*
+
+The app opens offline after installation and keeps saved places on this device. Download regions in the Android app for offline search and navigation. English and French follow the browser language, or you can choose a language in Settings.
 
 ## Development
 
